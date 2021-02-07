@@ -1,53 +1,68 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.Concrete.InMemory
 {
-    public class InMemoryProductDAL : IProductDAL
+    public class InMemoryProductDAL : ICarDAL
     {
         public InMemoryProductDAL()
         {
-            _products = new List<Product>
+            _products = new List<Car>
             {
-                new Product{Id = 1, BrandId =1, ColorId=1, DailyPrice=400, ModelYear = 2013, Description = "Siyah Volkswagen Passat"},
-                new Product{Id = 2, BrandId =2, ColorId=3, DailyPrice=800, ModelYear = 2020, Description = "Kırmızı Tesla Model S"},
-                new Product{Id = 3, BrandId =2, ColorId=1, DailyPrice=750, ModelYear = 2019, Description = "Siyah Tesla Model 3"},
-                new Product{Id = 4, BrandId =3, ColorId=2, DailyPrice=370, ModelYear = 2015, Description = "Beyaz Audi A4"},
-                new Product{Id = 5, BrandId =4, ColorId=2, DailyPrice=250, ModelYear = 2009, Description = "Beyaz Fiat Doblo"}
+                new Car{Id = 1, BrandId =1, ColorId=1, DailyPrice=400, ModelYear = 2013, Descript = "Siyah Volkswagen Passat"},
+                new Car{Id = 2, BrandId =2, ColorId=3, DailyPrice=800, ModelYear = 2020, Descript = "Kırmızı Tesla Model S"},
+                new Car{Id = 3, BrandId =2, ColorId=1, DailyPrice=750, ModelYear = 2019, Descript = "Siyah Tesla Model 3"},
+                new Car{Id = 4, BrandId =3, ColorId=2, DailyPrice=450, ModelYear = 2015, Descript = "Beyaz Audi A4"},
+                new Car{Id = 5, BrandId =4, ColorId=2, DailyPrice=250, ModelYear = 2009, Descript = "Beyaz Fiat Doblo"}
             };
         }
-        List<Product> _products;
-        public void Add(Product product)
+        List<Car> _products;
+        public void Add(Car product)
         {
             _products.Add(product);
         }
 
-        public void Delete(Product product)
+        public void Delete(Car product)
         {
-            Product productToDelete = _products.SingleOrDefault(car => car.Id == product.Id);
+            Car productToDelete = _products.SingleOrDefault(car => car.Id == product.Id);
             _products.Remove(productToDelete);
         }
-        public void Update(Product product)
+        public void Update(Car product)
         {
-            Product productToUpdate = _products.SingleOrDefault(car => car.Id == product.Id);
+            Car productToUpdate = _products.SingleOrDefault(car => car.Id == product.Id);
             product.DailyPrice = productToUpdate.DailyPrice;
             product.ColorId = productToUpdate.ColorId;
-            product.Description = productToUpdate.Description;
+            product.Descript = productToUpdate.Descript;
         }
-        public List<Product> GetAll()
+        public List<Car> GetAll()
         {
             return _products;
         }
 
-        public List<Product> GetAllById(int Id)
+        public List<Car> GetAllById(int Id)
         {
             return _products.Where(car => car.Id == Id).ToList();
         }
 
-        
+        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
