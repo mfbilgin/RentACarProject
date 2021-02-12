@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -11,28 +13,39 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDAL _carDAL;
+
         public CarManager(ICarDAL carDAL)
         {
             _carDAL = carDAL;
         }
 
-        public List<Car> GetAll()
+        public IResult Add(Car car)
         {
-            return _carDAL.GetAll();
-        }
-        public List<Car> GetAllByBrandId(int id)
-        {
-            return _carDAL.GetAll(p => p.BrandId == id);
-        }
-
-        public List<Car> GetAllByColorId(int id)
-        {
-            return _carDAL.GetAll(p => p.ColorId == id);
+            if(car.Ad == null||car.Ad.Length < 2)
+            {
+                return new ErrorResult(Messages.ProductNameInvalid);
+            }
+            _carDAL.Add(car);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDAL.GetCarDetails();
+            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.ProductsListed);
+        }
+        public IDataResult<List<Car>> GetAllByBrandId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(p => p.BrandId == id));
+        }
+
+        public IDataResult<List<Car>> GetAllByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>( _carDAL.GetAll(p => p.ColorId == id));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetCarDetails());
         }
     }
 }
