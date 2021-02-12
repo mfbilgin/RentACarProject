@@ -30,7 +30,7 @@ namespace ConsoleUI
             //CustomerDetailTest();
             //UserGetAllTest();
             //ColorAddTest();
-            //CarAddTest();
+            //CarAddTest(); 
             //BrandAddTest();
         }
         static void RentalUpdate(int carID, int customerID, int rentalId, DateTime rentDate, DateTime returnDate)
