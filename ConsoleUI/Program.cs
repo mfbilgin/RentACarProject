@@ -1,7 +1,6 @@
 ﻿using Business.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
-using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
 
@@ -11,7 +10,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            
+
 
 
 
@@ -21,8 +20,8 @@ namespace ConsoleUI
             //User user = new User();
             //CustomerManager customerManager = new CustomerManager(new EFCustomerDAL());
             //customerManager.Add(customer,user);
-            
-            
+
+
             //BrandTest
             //ColorTest();
             //CarTest();
@@ -44,7 +43,7 @@ namespace ConsoleUI
             rental.ReturnDate = returnDate;
             rentalDal.Update(rental);
         }
-        static void RentalAddTest(int carId,int customerId)
+        static void RentalAddTest(int carId, int customerId)
         {
             RentalManager rentalManager = new RentalManager(new EfRentalDal());
             Rental rental = new Rental();
@@ -53,7 +52,7 @@ namespace ConsoleUI
             rental.RentDate = DateTime.Now;
             rentalManager.Add(rental);
         }
-        static void CustomerUpdate(int customerId,string companyName,int userId)
+        static void CustomerUpdate(int customerId, string companyName, int userId)
         {
             EFCustomerDAL customerDal = new EFCustomerDAL();
             Customer customer = new Customer();
@@ -75,7 +74,7 @@ namespace ConsoleUI
                 Console.WriteLine("---------------------------------");
             }
         }
-        static void UserAddTest(string firstName,string lastName,string Email,string password)
+        static void UserAddTest(string firstName, string lastName, string Email, string password)
         {
             User user = new User();
             user.FirstName = firstName;
@@ -87,7 +86,7 @@ namespace ConsoleUI
 
             UserGetAllTest();
         }
-        static void CustomerAddTest(int UserId,string CompanyName)
+        static void CustomerAddTest(int UserId, string CompanyName)
         {
             Customer customer = new Customer();
             customer.CompanyName = CompanyName;
