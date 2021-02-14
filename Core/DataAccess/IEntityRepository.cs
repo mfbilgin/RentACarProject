@@ -8,7 +8,7 @@ namespace Core.DataAccess
 {
     //generic constraint
     //class : referans tip
-    //IEntity : IEntity olabilir veya IEntity implemente eden bir nesne olabilir    
+    //IEntity : IEntity olabilir veya IEntity implemente eden bir nesne olabilir
     //new() : new'lenebilir olmalı
     public interface IEntityRepository<T> where T : class, IEntity, new()
     {

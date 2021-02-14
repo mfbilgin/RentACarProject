@@ -10,9 +10,13 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
+            ColorManager colorManager = new ColorManager(new EFColorDAL());
+            var result = colorManager.GetByColorId(2);
+            foreach (var color in result.Data)
+            {
+                Console.WriteLine(color.ColorName);
 
-
-
+            }
 
             //Customer customer = new Customer();
             //customer.CompanyName = "KodlamaIO";
@@ -20,7 +24,7 @@ namespace ConsoleUI
             //User user = new User();
             //CustomerManager customerManager = new CustomerManager(new EFCustomerDAL());
             //customerManager.Add(customer,user);
-
+            //GetAllRentalTest();
 
             //BrandTest
             //ColorTest();
@@ -32,6 +36,31 @@ namespace ConsoleUI
             //CarAddTest(); 
             //BrandAddTest();
         }
+
+        private static void GetAllRentalTest()
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            var result = rentalManager.GetAll();
+            foreach (var rental in result.Data)
+            {
+                Console.WriteLine("Kiralama Id'si : " + rental.RentalId);
+                Console.WriteLine("Müşteri Id'si : " + rental.CustomerId);
+                Console.WriteLine("Kiralanan Araba Id'si : " + rental.CarId);
+                Console.WriteLine("Kiralama Tarihi : " + rental.RentDate);
+                if (rental.ReturnDate == null)
+                {
+                    Console.WriteLine("Teslim Tarihi : Araç Henüz Teslim Edilmemiş");
+                }
+                else
+                {
+                    Console.WriteLine("Teslim Tarihi : " + rental.ReturnDate);
+                }
+                Console.WriteLine("----------------------------------------");
+
+
+            }
+        }
+
         static void RentalUpdate(int carID, int customerID, int rentalId, DateTime rentDate, DateTime returnDate)
         {
             EfRentalDal rentalDal = new EfRentalDal();
