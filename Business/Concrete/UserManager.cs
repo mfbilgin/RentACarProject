@@ -4,6 +4,9 @@ using System.Text;
 using System.Xml;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -37,26 +40,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.Email == Email));
         }
 
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
-            if (user.Email == null)
-            {
-                Console.WriteLine("Email Adresini Girdiğinizden Emin Olunuz!");
-            }
-            else if (user.FirstName == null && user.FirstName.Length > 1)
-            {
-                Console.WriteLine("Lütfen Karakterden Uzun Bir İsim  Girdiğinizden Emin Olunuz!");
-            }
-            else if (user.LastName == null)
-            {
-                Console.WriteLine("Lütfen Soyisim Girdiğinizden Emin Olunuz!");
-            }
-            else if (user.Passwrd == null)
-            {
-                Console.WriteLine("Lütfen Parola Belirlediğinizden Emin Olunuz!");
-            }
+            ValidationTool.Validate(new UserValidator(), user);
+            
             _userDal.Add(user);
-            Console.WriteLine("Kullanıcı Eklendi.");
             return new SuccessResult(Messages.ProductAdded);
         }
     }
