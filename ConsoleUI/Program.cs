@@ -20,7 +20,7 @@ namespace ConsoleUI
 
             //Customer customer = new Customer();
             //customer.CompanyName = "KodlamaIO";
-            //customer.UserId = 1;
+            //customer.UserId = 1; 
             //User user = new User();
             //CustomerManager customerManager = new CustomerManager(new EFCustomerDAL());
             //customerManager.Add(customer,user);
