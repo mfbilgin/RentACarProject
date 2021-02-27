@@ -3,6 +3,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ConsoleUI
 {
@@ -10,31 +11,140 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            ColorManager colorManager = new ColorManager(new EFColorDAL());
-            var result = colorManager.GetByColorId(2);
-            foreach (var color in result.Data)
-            {
-                Console.WriteLine(color.ColorName);
 
-            }
+            //GetAllRentalTest();
+            //GetAllCarTest();
 
-            //Customer customer = new Customer();
-            //customer.CompanyName = "KodlamaIO";
-            //customer.UserId = 1; 
-            //User user = new User();
-            //CustomerManager customerManager = new CustomerManager(new EFCustomerDAL());
-            //customerManager.Add(customer,user);
+            //CarDetailTest();
+            //UserGetAllTest();
+
+            //ColorAddTest();
+            //BrandAddTest();
+            //CarAddTest();
+            //UserAddTest();
+            //CustomerAddTest();
+            RentalAddTest(4, 1);
+            //RentalAddTest(7,3);
+            //RentalAddTest(2,4);
             //GetAllRentalTest();
 
-            //BrandTest
-            //ColorTest();
-            //CarTest();
-            //CarDetailTest();
-            //CustomerDetailTest();
-            //UserGetAllTest();
-            //ColorAddTest();
-            //CarAddTest(); 
-            //BrandAddTest();
+
+        }
+
+        private static void GetAllCarTest()
+        {
+            CarManager carManager = new CarManager(new EFCarDAL());
+            var result = carManager.GetAll();
+            foreach (Car car in result.Data)
+            {
+                Console.WriteLine("Araç Id'si : " + car.CarId);
+                Console.WriteLine("Araç Adı : " + car.Descript);
+                Console.WriteLine("Araç Günlük Kiralam Bedeli : " + car.DailyPrice);
+                Console.WriteLine("Araç Model : " + car.ModelYear);
+                Console.WriteLine("--------------------------------");
+            }
+        }
+
+        static void BrandAddTest(string brandName)
+        {
+            Brand brand = new Brand();
+            brand.BrandName = brandName;
+            BrandManager brandManager = new BrandManager(new EFBrandDAL());
+            brandManager.Add(brand);
+            var result = brandManager.GetAll();
+            foreach (Brand b in result.Data)
+            {
+                Console.WriteLine(b.BrandName);
+            }
+
+            GetAllBrandTest();
+        }
+
+        
+
+        private static void ColorAddTest(string colorName)
+        {
+            Color color = new Color();
+            color.ColorName = colorName;
+            ColorManager colorManager = new ColorManager(new EFColorDAL());
+            colorManager.Add(color);
+
+            GetAllColorTest();
+        }
+
+        static void CarAddTest(int brandId, int colorId, int dailyPrice, string descript, int modelYear, string ad)
+        {
+            Car car = new Car();
+            CarManager carManager = new CarManager(new EFCarDAL());
+            car.BrandId = brandId;
+            car.ColorId = colorId;
+            car.DailyPrice = dailyPrice;
+            car.Descript = descript;
+            car.ModelYear = modelYear;
+            car.Ad = ad;
+            carManager.Add(car);
+
+            GetAllCarTest();
+        }
+
+        static void RentalAddTest(int carId, int customerId)
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            Rental rental = new Rental();
+            rental.CarId = carId;
+            rental.CustomerId = customerId;
+            rentalManager.Add(rental);
+
+            GetAllRentalTest();
+        }
+
+        static void UserAddTest(string firstName, string lastName, string Email, string password)
+        {
+            User user = new User();
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.Email = Email;
+            user.Passwrd = password;
+            UserManager userManager = new UserManager(new EfUserDal());
+            userManager.Add(user);
+
+            UserGetAllTest();
+        }
+
+        static void CustomerAddTest(int UserId, string CompanyName)
+        {
+            Customer customer = new Customer();
+            customer.CompanyName = CompanyName;
+            customer.UserId = UserId;
+            CustomerManager customerManager = new CustomerManager(new EFCustomerDAL());
+            customerManager.Add(customer);
+
+            GetAllCustomerTest();
+        }
+        static void RentalUpdate(int carID, int customerID, int rentalId, DateTime rentDate, DateTime returnDate)
+        {
+            EfRentalDal rentalDal = new EfRentalDal();
+            Rental rental = new Rental();
+            rental.CarId = carID;
+            rental.CustomerId = customerID;
+            rental.RentalId = rentalId;
+            rental.RentDate = rentDate;
+            rental.ReturnDate = returnDate;
+            rentalDal.Update(rental);
+
+            GetRentalByRentalId(rentalId);
+        }
+
+        private static void GetAllBrandTest()
+        {
+            BrandManager brandManager = new BrandManager(new EFBrandDAL());
+            var result = brandManager.GetAll();
+            foreach (Brand brand in result.Data)
+            {
+                Console.WriteLine("Marka Id'si : " + brand.BrandId);
+                Console.WriteLine("Marka Adı : " + brand.BrandName);
+                Console.WriteLine("------------------");
+            }
         }
 
         private static void GetAllRentalTest()
@@ -55,41 +165,22 @@ namespace ConsoleUI
                 {
                     Console.WriteLine("Teslim Tarihi : " + rental.ReturnDate);
                 }
+
                 Console.WriteLine("----------------------------------------");
-
-
+            }
+        }
+        private static void GetAllColorTest()
+        {
+            ColorManager colorManager = new ColorManager(new EFColorDAL());
+            var result = colorManager.GetAll();
+            foreach (Color color in result.Data)
+            {
+                Console.WriteLine("Renk Id'si : " + color.ColorId);
+                Console.WriteLine("Renk Adı : " + color.ColorName);
+                Console.WriteLine("------------------");
             }
         }
 
-        static void RentalUpdate(int carID, int customerID, int rentalId, DateTime rentDate, DateTime returnDate)
-        {
-            EfRentalDal rentalDal = new EfRentalDal();
-            Rental rental = new Rental();
-            rental.CarId = carID;
-            rental.CustomerId = customerID;
-            rental.RentalId = rentalId;
-            rental.RentDate = rentDate;
-            rental.ReturnDate = returnDate;
-            rentalDal.Update(rental);
-        }
-        static void RentalAddTest(int carId, int customerId)
-        {
-            RentalManager rentalManager = new RentalManager(new EfRentalDal());
-            Rental rental = new Rental();
-            rental.CarId = carId;
-            rental.CustomerId = customerId;
-            rental.RentDate = DateTime.Now;
-            rentalManager.Add(rental);
-        }
-        static void CustomerUpdate(int customerId, string companyName, int userId)
-        {
-            EFCustomerDAL customerDal = new EFCustomerDAL();
-            Customer customer = new Customer();
-            customer.CustomerId = customerId;
-            customer.CompanyName = companyName;
-            customer.UserId = userId;
-            customerDal.Update(customer);
-        }
         static void UserGetAllTest()
         {
             UserManager userManager = new UserManager(new EfUserDal());
@@ -100,35 +191,36 @@ namespace ConsoleUI
                 Console.WriteLine("İsim : " + user.FirstName);
                 Console.WriteLine("Soyisim : " + user.LastName);
                 Console.WriteLine("Email : " + user.Email);
-                Console.WriteLine("---------------------------------");
             }
         }
-        static void UserAddTest(string firstName, string lastName, string Email, string password)
-        {
-            User user = new User();
-            user.FirstName = firstName;
-            user.LastName = lastName;
-            user.Email = Email;
-            user.Passwrd = password;
-            UserManager userManager = new UserManager(new EfUserDal());
-            userManager.Add(user);
 
-            UserGetAllTest();
-        }
-        static void CustomerAddTest(int UserId, string CompanyName)
+        private static void GetAllCustomerTest()
         {
-            Customer customer = new Customer();
-            customer.CompanyName = CompanyName;
-            customer.UserId = UserId;
             CustomerManager customerManager = new CustomerManager(new EFCustomerDAL());
-            customerManager.Add(customer);
+            var result = customerManager.GetAll();
+            foreach (Customer customer in result.Data)
+            {
+                Console.WriteLine("Kullanıcı Id'si : " + customer.UserId);
+                Console.WriteLine("Müşteri Id'si : " + customer.CompanyName);
+                Console.WriteLine("Şirket Adı : " + customer.CompanyName);
+                Console.WriteLine("---------------------------------");
+
+            }
         }
-        static void CustomerDeleteTest()
+
+        private static void GetRentalByRentalId(int rentalId)
         {
-            Customer customer = new Customer();
-            customer.CustomerId = 1;
-            ICustomerDAL customerDal = new EFCustomerDAL();
-            customerDal.Delete(customer);
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            var data = rentalManager.GetById(rentalId).Data;
+            foreach (Rental rental in data)
+            {
+                Console.WriteLine("Kiralama Id'si : " + rental.RentalId);
+                Console.WriteLine("Kiralanan Araba Id'si : " + rental.CarId);
+                Console.WriteLine("Kiralayan Müşteri Id'si : " + rental.CustomerId);
+                Console.WriteLine("Kiralama Tarihi : " + rental.RentDate);
+                Console.WriteLine("Teslim Tarihi : " + rental.ReturnDate);
+                Console.WriteLine("--------------------------------");
+            }
         }
 
         static void CarDetailTest()
@@ -143,80 +235,7 @@ namespace ConsoleUI
                                   "Günlük Kiralama Bedeli : " + car.DailyPrice + "\n" +
                                   "-----------------------------------------");
             }
-
-            static void BrandAddTest()
-            {
-                Brand BMW = new Brand();
-                BMW.BrandId = 5;
-                BMW.BrandName = "BMW";
-                EFBrandDAL eFBrandDAL = new EFBrandDAL();
-                eFBrandDAL.Add(BMW);
-                BrandManager brandManager = new BrandManager(new EFBrandDAL());
-                var result = brandManager.GetAll();
-                foreach (Brand brand in result.Data)
-                {
-                    Console.WriteLine(brand.BrandName);
-                }
-            }
-
-            static void ColorAddTest()
-            {
-                Color yellow = new Color();
-                yellow.ColorId = 4;
-                yellow.ColorName = "Sarı";
-                EFColorDAL eFColorDAL = new EFColorDAL();
-                eFColorDAL.Add(yellow);
-                ColorManager colorManager = new ColorManager(new EFColorDAL());
-                var result = colorManager.GetAll();
-                foreach (Color color in result.Data)
-                {
-                    Console.WriteLine(color.ColorName);
-                }
-            }
-
-            static void BrandTest()
-            {
-                BrandManager brandManager = new BrandManager(new EFBrandDAL());
-                var result = brandManager.GetByBrandId(2);
-                foreach (Brand brand in result.Data)
-                {
-                    Console.WriteLine(brand.BrandName);
-                }
-            }
-
-            static void ColorTest()
-            {
-                ColorManager colorManager = new ColorManager(new EFColorDAL());
-                var result = colorManager.GetByColorId(2);
-                foreach (Color color in result.Data)
-                {
-                    Console.WriteLine(color.ColorName);
-                }
-            }
-
-            static void CarAddTest()
-            {
-                Car product2 = new Car();
-                product2.BrandId = 2;
-                product2.ColorId = 2;
-                product2.DailyPrice = 800;
-                product2.Descript = "Beyaz Tesla Model X";
-                product2.CarId = 10;
-                product2.ModelYear = 2020;
-                product2.Ad = "";
-                EFCarDAL eFCarDAL = new EFCarDAL();
-                eFCarDAL.Add(product2);
-            }
-
-            static void CarTest()
-            {
-                CarManager productManager = new CarManager(new EFCarDAL());
-                var result = productManager.GetAllByColorId(2);
-                foreach (Car car in result.Data)
-                {
-                    Console.WriteLine(car.Descript);
-                }
-            }
         }
+
     }
 }

@@ -21,7 +21,6 @@ namespace Core.Utilities.Interceptors
             {
                 isSuccess = false;
                 OnException(invocation, e);
-                throw;
             }
             finally
             {

@@ -2,15 +2,17 @@
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class RentalValidator : AbstractValidator<Rental>
+    public class CarImageValidator : AbstractValidator<CarImage>
     {
-        public RentalValidator()
+        public CarImageValidator()
         {
-            RuleFor(r => r.CarId).NotEmpty();
+            RuleFor(p => p.CarId).NotEmpty();
         }
     }
 }

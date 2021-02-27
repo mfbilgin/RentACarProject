@@ -15,20 +15,12 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public void Add(Car entity)
         {
-            if (entity.DailyPrice > 0 && entity.Ad.Length >= 2)
+            using (RentACarContext context = new RentACarContext())
             {
-                using (RentACarContext context = new RentACarContext())
-                {
-                    var AddedEntity = context.Entry(entity);
-                    AddedEntity.State = EntityState.Added;
-                    context.SaveChanges();
-                }
+                var AddedEntity = context.Entry(entity);
+                AddedEntity.State = EntityState.Added;
+                context.SaveChanges();
             }
-            else if (entity.Ad == null || entity.Ad.Length < 2)
-            {
-                Console.WriteLine("Lütfen en az iki karakterden oluşan bir isim girdiğinizden emin olunuz");
-            }
-
         }
 
         public void Delete(Car entity)

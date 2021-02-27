@@ -13,7 +13,8 @@ namespace Business.Constants
         public static string MaintenanceTime = "Sistem bakımda";
         public static string ProductsListed = "Ürünler listelendi";
         public static string ProductDeleted = "Ürün Silindi.";
-        public static string Error = "Araç henüz teslim edilmemiş.";
-        public static string Success = "Araç kiralama listesine eklendi.";
+        public static string ReturnDateError = "Araç henüz teslim edilmemiş.";
+        public static string RentalSuccess = "Araç kiralama listesine eklendi.";
+        public static string LimitedExcected = "Bir aracın en fazla 5 resmi olabilir.";
     }
 }
