@@ -7,6 +7,7 @@ using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -15,38 +16,27 @@ namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-        private IUserDAL _userDal;
-        public UserManager(IUserDAL userDal)
+        IUserDAL _userDAL;
+
+        public UserManager(IUserDAL userDAL)
         {
-            _userDal = userDal;
-        }
-        public IDataResult<List<User>> GetAll()
-        {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll());
+            _userDAL = userDAL;
         }
 
-        public IDataResult<List<User>> GetByUserId(int UserId)
+        public List<OperationClaim> GetClaims(User user)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.UserId == UserId));
+            return _userDAL.GetClaims(user);
         }
 
-        public IDataResult<List<User>> GetByFirstName(string FirstName)
+        public void Add(User user)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.FirstName == FirstName));
+            _userDAL.Add(user);
+
         }
 
-        public IDataResult<List<User>> GetByEmail(string Email)
+        public User GetByMail(string email)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.Email == Email));
-        }
-
-        [ValidationAspect(typeof(UserValidator))]
-        public IResult Add(User user)
-        {
-            ValidationTool.Validate(new UserValidator(), user);
-            
-            _userDal.Add(user);
-            return new SuccessResult(Messages.ProductAdded);
+            return _userDAL.Get(u => u.Email == email);
         }
     }
 }

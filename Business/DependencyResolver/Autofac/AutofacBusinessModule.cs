@@ -9,6 +9,7 @@ using DataAccess.Concrete.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Utilities.Security.Jwt;
 
 namespace Business.DependencyResolver.Autofac
 {
@@ -37,6 +38,9 @@ namespace Business.DependencyResolver.Autofac
             builder.RegisterType<CarImageManager>().As<ICarImageService>().SingleInstance();
             builder.RegisterType<EfCarImageDal>().As<ICarImageDal>().SingleInstance();
 
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+            builder.RegisterType<JWTHelper>().As<ITokenHelper>();
+
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
@@ -46,4 +50,4 @@ namespace Business.DependencyResolver.Autofac
                 }).SingleInstance();
         }
     }
-}
+} 

@@ -16,5 +16,13 @@ namespace Business.Constants
         public static string ReturnDateError = "Araç henüz teslim edilmemiş.";
         public static string RentalSuccess = "Araç kiralama listesine eklendi.";
         public static string LimitedExcected = "Bir aracın en fazla 5 resmi olabilir.";
+
+        public static string UserNotFound = "Kullanıcı Bulunamadı.";
+        public static string PasswordError = "Parola Hatalı";
+        public static string SuccessfulLogin = "Giriş Yapıldı";
+        public static string UserAlreadyExists = "Bu kullanıcı zaten var.";
+        public static string UserRegistered = "Kullanıcı oluştuldu";
+        public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
+        public static string AuthorizationDenied = "Bu işlem için yetkiniz bulunmuyor";
     }
 }

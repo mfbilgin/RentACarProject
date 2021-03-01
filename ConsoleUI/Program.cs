@@ -4,6 +4,7 @@ using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using Microsoft.IdentityModel.Tokens;
+using Core.Entities.Concrete;
 
 namespace ConsoleUI
 {
@@ -98,18 +99,18 @@ namespace ConsoleUI
             GetAllRentalTest();
         }
 
-        static void UserAddTest(string firstName, string lastName, string Email, string password)
-        {
-            User user = new User();
-            user.FirstName = firstName;
-            user.LastName = lastName;
-            user.Email = Email;
-            user.Passwrd = password;
-            UserManager userManager = new UserManager(new EfUserDal());
-            userManager.Add(user);
+        //static void UserAddTest(string firstName, string lastName, string Email, string password)
+        //{
+        //    User user = new User();
+        //    user.FirstName = firstName;
+        //    user.LastName = lastName;
+        //    user.Email = Email;
+        //    user.Passwrd = password;
+        //    UserManager userManager = new UserManager(new EfUserDal());
+        //    userManager.Add(user);
 
-            UserGetAllTest();
-        }
+        //    UserGetAllTest();
+        //}
 
         static void CustomerAddTest(int UserId, string CompanyName)
         {
@@ -181,18 +182,18 @@ namespace ConsoleUI
             }
         }
 
-        static void UserGetAllTest()
-        {
-            UserManager userManager = new UserManager(new EfUserDal());
-            var result = userManager.GetAll();
-            foreach (User user in result.Data)
-            {
-                Console.WriteLine("Kullanıcı Id'si : " + user.UserId);
-                Console.WriteLine("İsim : " + user.FirstName);
-                Console.WriteLine("Soyisim : " + user.LastName);
-                Console.WriteLine("Email : " + user.Email);
-            }
-        }
+        //static void UserGetAllTest()
+        //{
+        //    UserManager userManager = new UserManager(new EfUserDal());
+        //    var result = userManager.GetAll();
+        //    foreach (User user in result.Data)
+        //    {
+        //        Console.WriteLine("Kullanıcı Id'si : " + user.UserId);
+        //        Console.WriteLine("İsim : " + user.FirstName);
+        //        Console.WriteLine("Soyisim : " + user.LastName);
+        //        Console.WriteLine("Email : " + user.Email);
+        //    }
+        //}
 
         private static void GetAllCustomerTest()
         {

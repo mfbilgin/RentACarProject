@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using Entities.Concrete;
+﻿using Core.Entities.Concrete;
 using FluentValidation;
 
 namespace Business.ValidationRules.FluentValidation
@@ -11,11 +7,9 @@ namespace Business.ValidationRules.FluentValidation
     {
         public UserValidator()
         {
-            RuleFor(u => u.Email).NotEmpty();
-            RuleFor(u => u.FirstName).NotEmpty();
-            RuleFor(u => u.LastName).NotEmpty();
-            RuleFor(u => u.Passwrd).NotEmpty();
-            
+            RuleFor(u => u.FirstName).NotNull();
+            RuleFor(u => u.LastName).NotNull();
+            RuleFor(u => u.Email).NotNull().EmailAddress();
         }
     }
 }

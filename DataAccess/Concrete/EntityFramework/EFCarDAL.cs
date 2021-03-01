@@ -63,7 +63,7 @@ namespace DataAccess.Concrete.EntityFramework
                              on c.BrandId equals b.BrandId
                              select new CarDetailDto
                              {
-                                 Ad = c.Ad,
+                                 Ad = c.BrandName,
                                  DailyPrice = c.DailyPrice,
                                  ColorName = col.ColorName,
                                  BrandName = b.BrandName
