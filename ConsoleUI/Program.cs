@@ -82,7 +82,7 @@ namespace ConsoleUI
             car.DailyPrice = dailyPrice;
             car.Descript = descript;
             car.ModelYear = modelYear;
-            car.Ad = ad;
+            car.BrandName = ad;
             carManager.Add(car);
 
             GetAllCarTest();
