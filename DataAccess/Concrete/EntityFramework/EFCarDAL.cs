@@ -11,7 +11,7 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EFCarDAL : EfEntityRepositoryBase<Car , RentACarContext> ,ICarDAL
+    public class EFCarDAL : EfEntityRepositoryBase<Car, RentACarContext>, ICarDAL
     {
         public void Add(Car entity)
         {
@@ -51,22 +51,23 @@ namespace DataAccess.Concrete.EntityFramework
                     : context.Set<Car>().Where(filter).ToList();
             }
         }
-
-        public List<CarDetailDto> GetCarDetails()
+        public List<CarDetailDto> GetAllCarDetails(Expression<Func<Car, bool>> filter = null)
         {
             using (RentACarContext context = new RentACarContext())
             {
-                var result = from c in context.Cars
+                var result = from c in filter == null ? context.Cars : context.Cars.Where(filter)
                              join col in context.Colors
                              on c.ColorId equals col.ColorId
                              join b in context.Brands
                              on c.BrandId equals b.BrandId
                              select new CarDetailDto
                              {
-                                 Ad = c.BrandName,
                                  DailyPrice = c.DailyPrice,
                                  ColorName = col.ColorName,
-                                 BrandName = b.BrandName
+                                 BrandName = b.BrandName,
+                                 carId = c.CarId,
+                                 descript = c.Descript,
+                                 ModelYear = c.ModelYear
                              };
                 return result.ToList();
             }

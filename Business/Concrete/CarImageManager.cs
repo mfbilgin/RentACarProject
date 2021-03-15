@@ -45,7 +45,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Update(IFormFile file, CarImage carImage)
         {
-            var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.Id == carImage.Id).ImagePath;
+            var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../wwwroot")) + _carImageDal.Get(p => p.Id == carImage.Id).ImagePath;
             carImage.ImagePath = FileHelper.UpdateAsync(oldpath, file);
             carImage.UploadDate = DateTime.Now;
             _carImageDal.Update(carImage);
@@ -79,24 +79,25 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
-
-        public IDataResult<List<CarImage>> GetImagesByCarId(int id)
+        [ValidationAspect(typeof(CarImageValidator))]
+        public IDataResult<List<CarImage>> GetImagesByCarId(int carId)
         {
-            IResult result = BusinessRules.Run(CheckIfCarImageNull(id));
-
-            if (result != null)
+            var result = _carImageDal.GetAll(i => i.CarId == carId).Any();
+            if (!result)
             {
-                return new ErrorDataResult<List<CarImage>>(result.Message);
+                List<CarImage> carImage = new List<CarImage>();
+                carImage.Add(new CarImage { ImagePath = @"\Images\default.jpg", CarId = carId });
+                return new SuccessDataResult<List<CarImage>>(carImage);
             }
 
-            return new SuccessDataResult<List<CarImage>>(CheckIfCarImageNull(id).Data);
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(Cı => Cı.CarId == carId));
         }
 
         private IDataResult<List<CarImage>> CheckIfCarImageNull(int id)
         {
             try
             {
-                string path = @"\Images\default.jpg";
+                string path = @"/Images/default.jpg";
                 var result = _carImageDal.GetAll(c => c.CarId == id).Any();
                 if (!result)
                 {
@@ -107,7 +108,6 @@ namespace Business.Concrete
             }
             catch (Exception exception)
             {
-
                 return new ErrorDataResult<List<CarImage>>(exception.Message);
             }
 

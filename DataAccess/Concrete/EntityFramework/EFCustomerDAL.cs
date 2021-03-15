@@ -14,5 +14,23 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFCustomerDAL : EfEntityRepositoryBase<Customer, RentACarContext>, ICustomerDAL
     {
+        public List<CustomerDetailDto> GetCarDetails()
+        {
+            using (RentACarContext context = new RentACarContext())
+            {
+                var result = from c in context.Customers
+                             join u in context.Users
+                             on c.UserId equals u.UserId
+                             select new CustomerDetailDto
+                             {
+                                 CustomerId = c.CustomerId,
+                                 CompanyName = c.CompanyName,
+                                 FirstName = u.FirstName,
+                                 LastName = u.LastName,
+                                 Email = u.Email
+                             };
+                return result.ToList();
+            }
+        }
     }
 }

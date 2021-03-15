@@ -50,5 +50,6 @@ namespace DataAccess.Concrete.EntityFramework
                 return context.Set<CarImage>().SingleOrDefault(filter);
             }
         }
+
     }
 }

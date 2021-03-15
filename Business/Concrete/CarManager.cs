@@ -14,6 +14,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Business.Concrete
 {
@@ -43,6 +44,9 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.ProductsListed);
         }
+
+
+
         [CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<List<Car>> GetAllByBrandId(int id)
@@ -55,12 +59,6 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Car>>( _carDAL.GetAll(p => p.ColorId == id));
         }
-
-        public IDataResult<List<CarDetailDto>> GetCarDetails()
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetCarDetails());
-        }
-
         [TransactionScopeAspect]
         public IResult AddTransactionalTest(Car car)
         {
@@ -71,6 +69,20 @@ namespace Business.Concrete
             }
             Add(car);
             return null;
+        }
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails());
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrand(int brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.BrandId == brandId));
+        }
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColor(int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == colorId));
         }
     }
 }

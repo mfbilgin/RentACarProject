@@ -24,11 +24,12 @@ namespace ConsoleUI
             //CarAddTest();
             //UserAddTest();
             //CustomerAddTest();
-            RentalAddTest(4, 1);
+            //RentalAddTest(4, 1);
             //RentalAddTest(7,3);
             //RentalAddTest(2,4);
             //GetAllRentalTest();
-
+            RentalUpdate(1);
+            GetRentalByRentalId(1);
 
         }
 
@@ -122,18 +123,22 @@ namespace ConsoleUI
 
             GetAllCustomerTest();
         }
-        static void RentalUpdate(int carID, int customerID, int rentalId, DateTime rentDate, DateTime returnDate)
+        private static void RentalUpdate(int rentalId)
         {
-            EfRentalDal rentalDal = new EfRentalDal();
-            Rental rental = new Rental();
-            rental.CarId = carID;
-            rental.CustomerId = customerID;
-            rental.RentalId = rentalId;
-            rental.RentDate = rentDate;
-            rental.ReturnDate = returnDate;
-            rentalDal.Update(rental);
-
-            GetRentalByRentalId(rentalId);
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            var data = rentalManager.GetById(rentalId).Data;
+            foreach (Rental r in data)
+            {
+                EfRentalDal rentalDal = new EfRentalDal();
+                Rental rental = new Rental();
+                rental.CarId = r.CarId;
+                rental.CustomerId = r.CustomerId;
+                rental.UserId = r.UserId;
+                rental.RentalId = rentalId;
+                rental.RentDate = r.RentDate;
+                rental.ReturnDate = DateTime.Now;
+                rentalDal.Update(rental);
+            }
         }
 
         private static void GetAllBrandTest()
@@ -230,8 +235,7 @@ namespace ConsoleUI
             var result = carManager.GetCarDetails();
             foreach (var car in result.Data)
             {
-                Console.WriteLine("Adı : " + car.Ad + "\n" +
-                                  "Markası : " + car.BrandName + "\n" +
+                Console.WriteLine("Markası : " + car.BrandName + "\n" +
                                   "Rengi : " + car.ColorName + "\n" +
                                   "Günlük Kiralama Bedeli : " + car.DailyPrice + "\n" +
                                   "-----------------------------------------");

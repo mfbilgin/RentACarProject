@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using System.Threading;
 
 namespace WebAPI.Controllers
 {
@@ -25,12 +26,13 @@ namespace WebAPI.Controllers
         {
             //Swagger
             //Dependency chain --
+
             var result = _brandService.GetAll();
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("getbybrandid")]
@@ -39,10 +41,10 @@ namespace WebAPI.Controllers
             var result = _brandService.GetByBrandId(brandId);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("getbybrandname")]

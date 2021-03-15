@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Business.Abstract;
 using Business.Constants;
 using Core.Utilities.Results;
@@ -38,6 +39,11 @@ namespace Business.Concrete
         {
             _customerDal.Add(customer);
             return new SuccessResult(Messages.ProductAdded);
+        }
+
+        public IDataResult<List<CustomerDetailDto>> GetCustomerDetail()
+        {
+            return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCarDetails());
         }
     }
 }

@@ -11,6 +11,8 @@ using Entities.Concrete;
 using Core.DataAccess;
 using Core.Utilities.Business;
 using Microsoft.EntityFrameworkCore.Internal;
+using System.Threading;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -67,6 +69,11 @@ namespace Business.Concrete
             }
 
             return new SuccessResult();
+        }
+
+        public IDataResult<List<RentalDetailDto>> GetRentalDetail()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
         }
     }
 }

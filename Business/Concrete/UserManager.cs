@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using Business.Abstract;
 using Business.Constants;
@@ -37,6 +38,11 @@ namespace Business.Concrete
         public User GetByMail(string email)
         {
             return _userDAL.Get(u => u.Email == email);
+        }
+
+        public IDataResult<List<User>> GetAll()
+        {
+            return new SuccessDataResult<List<User>>(_userDAL.GetAll());
         }
     }
 }
