@@ -10,6 +10,6 @@ namespace Entities.Concrete
         public int Id { get; set; }
         public int CarId { get; set; }
         public string ImagePath { get; set; }
-        public DateTime UploadDate { get; set; }
+        public DateTime Date = DateTime.Now;
     }
 }

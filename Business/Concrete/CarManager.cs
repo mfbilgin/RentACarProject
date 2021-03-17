@@ -46,6 +46,11 @@ namespace Business.Concrete
         }
 
 
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.CarId == carId));
+
+        }
 
         [CacheAspect]
         [PerformanceAspect(7)]
@@ -70,19 +75,61 @@ namespace Business.Concrete
             Add(car);
             return null;
         }
-        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails());
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(), Messages.succeed);
+        }
+        public IDataResult<List<CarDetailDto>> GetCarDetailsById(int id)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.CarId == id), Messages.succeed);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrand(int brandId)
+        public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int id)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.BrandId == brandId));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.BrandId == id), Messages.succeed);
         }
-        public IDataResult<List<CarDetailDto>> GetCarDetailsByColor(int colorId)
+
+        public IDataResult<List<CarDetailDto>> GetCarsByColorId(int id)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == colorId));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == id), Messages.succeed);
+        }
+
+        public IResult Delete(int carId)
+        {
+
+            foreach (var car in _carDAL.GetAll())
+            {
+                if (car.CarId == carId)
+                {
+                    _carDAL.Delete(car);
+                    return new SuccessResult(Messages.ProductDeleted);
+
+                }
+            }
+            return new ErrorResult(Messages.error);
+        }
+
+        public IResult Update(int carId, Car car)
+        {
+            foreach (var _car in _carDAL.GetAll())
+            {
+                if (_car.CarId == carId)
+                {
+                    _car.ColorId = car.ColorId;
+                    _car.BrandId = car.BrandId;
+                    _car.ModelYear = car.ModelYear;
+                    _car.DailyPrice = car.DailyPrice;
+                    _car.Descript = car.Descript;
+                    return new SuccessResult(Messages.updated);
+
+                }
+            }
+            return new SuccessResult(Messages.error);
+        }
+
+        public IDataResult<List<Car>> GetById(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.listed);
         }
     }
 }

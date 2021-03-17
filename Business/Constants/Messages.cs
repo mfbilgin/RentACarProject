@@ -15,7 +15,13 @@ namespace Business.Constants
         public static string ProductDeleted = "Ürün Silindi.";
         public static string ReturnDateError = "Araç henüz teslim edilmemiş.";
         public static string RentalSuccess = "Araç kiralama listesine eklendi.";
-        public static string LimitedExcected = "Bir aracın en fazla 5 resmi olabilir.";
+        public static string CarImagesCountExceded = "Bir aracın en fazla 5 resmi olabilir.";
+        public static string added = "eklendi";
+        public static string deleted = "silindi";
+        public static string updated = "güncellendi";
+        public static string error = "hata";
+        public static string listed = "listelendi";
+        public static string succeed = "başarılı";
 
         public static string UserNotFound = "Kullanıcı Bulunamadı.";
         public static string PasswordError = "Parola Hatalı";
@@ -24,5 +30,6 @@ namespace Business.Constants
         public static string UserRegistered = "Kullanıcı oluştuldu";
         public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
         public static string AuthorizationDenied = "Bu işlem için yetkiniz bulunmuyor";
+        public static string[] ValidImageFileTypes = { ".JPG", ".JPEG", ".PNG", ".TIF", ".TIFF", ".GIF", ".BMP", ".ICO" };
     }
 }

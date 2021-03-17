@@ -5,6 +5,7 @@ using Entities.Concrete;
 using System;
 using Microsoft.IdentityModel.Tokens;
 using Core.Entities.Concrete;
+using System.Globalization;
 
 namespace ConsoleUI
 {
@@ -28,8 +29,9 @@ namespace ConsoleUI
             //RentalAddTest(7,3);
             //RentalAddTest(2,4);
             //GetAllRentalTest();
-            RentalUpdate(1);
-            GetRentalByRentalId(1);
+            //RentalUpdate(1);
+            //GetRentalByRentalId(1);
+
 
         }
 

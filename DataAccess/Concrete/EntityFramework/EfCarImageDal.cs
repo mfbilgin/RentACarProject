@@ -2,54 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using Microsoft.EntityFrameworkCore;
+using Entities.DTOs;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarImageDal : EfEntityRepositoryBase<CarImage, RentACarContext>, ICarImageDal
-    {
-        public void Add(CarImage entity)
+        public class EfCarImageDal : EfEntityRepositoryBase<CarImage, RentACarContext>, ICarImageDal
         {
-            using (RentACarContext context = new RentACarContext())
+            public List<CarImageDto> GetCarImageDetails(Expression<Func<CarImage, bool>> filter = null)
             {
-                var AddedEntity = context.Entry(entity);
-                AddedEntity.State = EntityState.Added;
-                context.SaveChanges();
+                using (RentACarContext context = new RentACarContext())
+                {
+                    var result = from image in filter == null ? context.CarImages : context.CarImages.Where(filter)
+                        join car in context.Cars
+                        on image.CarId equals car.CarId
+                        select new CarImageDto
+                        {   
+                            CarId = car.CarId,
+                            ImagePath = image.ImagePath
+                        };
+                    return result.ToList();
+                }
             }
         }
-
-        public void Delete(CarImage entity)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                var DeletedEntity = context.Entry(entity);
-                DeletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
-                Console.WriteLine("Ürün silindi !");
-            }
-        }
-
-        public void Update(CarImage entity)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                var UpdatedEntity = context.Entry(entity);
-                UpdatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
-            }
-        }
-
-        public CarImage Get(Expression<Func<CarImage, bool>> filter)
-        {
-            using (RentACarContext context = new RentACarContext())
-            {
-                return context.Set<CarImage>().SingleOrDefault(filter);
-            }
-        }
-
-    }
 }
