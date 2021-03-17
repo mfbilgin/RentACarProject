@@ -60,11 +60,19 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(), Messages.listed);
         }
 
-
+        //! Refactor Et
         public IDataResult<List<CarImageDto>> GetImagesByCarId(int carId)
         {
-            IfImageNull(carId);
+            string path = "/images/default.jpg";
+            var result = _carImageDal.GetCarImageDetails(carImage => carImage.CarId == carId).Any();
+            if (!result)
+            {
+                List<CarImageDto> carimage = new List<CarImageDto>();
+                carimage.Add(new CarImageDto { CarId = carId, ImagePath = path });
+                return new SuccessDataResult<List<CarImageDto>>(carimage);
+            }
             return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == carId), Messages.succeed);
+
         }
 
 
@@ -137,7 +145,7 @@ namespace Business.Concrete
                 carimage.Add(new CarImageDto { CarId = carId, ImagePath = path });
                 return new SuccessDataResult<List<CarImageDto>>(carimage);
             }
-            return null;
+            return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == carId), Messages.succeed);
         }
     }
 }
