@@ -31,5 +31,10 @@ namespace Business.Constants
         public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
         public static string AuthorizationDenied = "Bu işlem için yetkiniz bulunmuyor";
         public static string[] ValidImageFileTypes = { ".JPG", ".JPEG", ".PNG", ".TIF", ".TIFF", ".GIF", ".BMP", ".ICO" };
+
+
+        public static string InsufficientBalance = "Yetersiz bakiye";
+
+        public static string PaymentCompleted = "Ödeme yapıldı";
     }
 }

@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using Business.BusinessAspects.Autofac;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
 using Entities.DTOs;
 
 namespace Business.Concrete
@@ -25,7 +26,8 @@ namespace Business.Concrete
         {
             _carImageDal = carImage;
         }
-
+        [SecuredOperation("carimage.add,admin")]
+        [PerformanceAspect(7)]
         public IResult Add(IFormFile file, CarImage carImage,int carId)
         {
             IResult result = BusinessRules.Run(CheckImageLimitExceeded(carId));
@@ -54,13 +56,16 @@ namespace Business.Concrete
             _carImageDal.Delete(carImage);
             return new SuccessResult();
         }
-
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(), Messages.listed);
         }
-
+            
         //! Refactor Et
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarImageDto>> GetImagesByCarId(int carId)
         {
             string path = "/images/default.jpg";
@@ -91,13 +96,10 @@ namespace Business.Concrete
             return new SuccessResult("Car image updated");
 
         }
-        public IDataResult<CarImage> GetById(int id)
-        {
-            return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == id));
-        }
+
         private IResult CheckImageLimitExceeded(int id)
         {
-            if (_carImageDal.GetAll(image => image.CarId == id).Count >= 5)
+            if (_carImageDal.GetAll(image => image.CarId == id).Count >= 3)
             {
                 return new ErrorResult(Messages.CarImagesCountExceded);
             }
@@ -105,6 +107,8 @@ namespace Business.Concrete
             return new SuccessResult();
             
         }
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<CarImage> Get(int id)
         {
             return new SuccessDataResult<CarImage>(_carImageDal.Get(p => p.Id == id));
@@ -124,28 +128,24 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public IDataResult<List<CarImageDto>> GetImagesByColorId(int colorId)
+        public IDataResult<List<CarImage>> GetAllByCarId(int carId)
         {
-
-            return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == colorId), Messages.succeed);
-        }
-
-        public IDataResult<List<CarImageDto>> GetImagesByBrandId(int brandId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDataResult<List<CarImageDto>> IfImageNull(int carId)
-        {
-            string path = "/images/default.jpg";
-            var result = _carImageDal.GetCarImageDetails(carImage => carImage.CarId == carId).Any();
-            if (!result)
+            var getAllbyCarIdResult = _carImageDal.GetAll(p => p.CarId == carId);
+            if (getAllbyCarIdResult.Count == 0)
             {
-                List<CarImageDto> carimage = new List<CarImageDto>();
-                carimage.Add(new CarImageDto { CarId = carId, ImagePath = path });
-                return new SuccessDataResult<List<CarImageDto>>(carimage);
+                return new SuccessDataResult<List<CarImage>>(new List<CarImage>
+                {
+                    new CarImage
+                    {
+                        Id = -1,
+                        CarId = carId,
+                        Date = DateTime.MinValue,
+                        ImagePath = "images/default.jpg"
+                    }
+                });
             }
-            return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == carId), Messages.succeed);
+
+            return new SuccessDataResult<List<CarImage>>(getAllbyCarIdResult);
         }
     }
 }

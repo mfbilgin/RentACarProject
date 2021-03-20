@@ -42,8 +42,15 @@ namespace Business.Concrete
             {
                 return result;
             }
+            if (rental.RentDate == null)
+            {
             rental.RentDate = DateTime.Now;
+            }
+            else if (rental.RentDate != null)
+            {
             _rentalDal.Add(rental);
+            }
+
             return new SuccessResult(Messages.RentalSuccess);  
         }
 

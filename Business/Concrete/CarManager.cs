@@ -4,7 +4,6 @@ using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Performance;
-using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
@@ -13,18 +12,17 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-
 namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
         ICarDAL _carDAL;
+        private ICarImageService _carImageService;
 
-        public CarManager(ICarDAL carDAL)
+        public CarManager(ICarDAL carDAL, ICarImageService carImageService)
         {
             _carDAL = carDAL;
+            _carImageService = carImageService;
         }
         [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
@@ -39,13 +37,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
         [CacheAspect]
+        [SecuredOperation("car.add,admin")]
         [PerformanceAspect(7)]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.ProductsListed);
         }
 
-
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.CarId == carId));
@@ -64,31 +64,27 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Car>>( _carDAL.GetAll(p => p.ColorId == id));
         }
-        [TransactionScopeAspect]
-        public IResult AddTransactionalTest(Car car)
-        {
-            Add(car);
-            if (car.DailyPrice < 1000)
-            {
-                throw new Exception("");
-            }
-            Add(car);
-            return null;
-        }
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(), Messages.succeed);
         }
+
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarDetailsById(int id)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.CarId == id), Messages.succeed);
         }
-
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int id)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.BrandId == id), Messages.succeed);
         }
-
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarsByColorId(int id)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == id), Messages.succeed);
@@ -126,10 +122,29 @@ namespace Business.Concrete
             }
             return new SuccessResult(Messages.error);
         }
-
+        [CacheAspect]
+        [PerformanceAspect(7)]
         public IDataResult<List<Car>> GetById(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.listed);
+        }
+
+        public IDataResult<CarAndImagesDto> GetCarAndImagesDto(int carId)
+        {
+            var result = _carDAL.GetCarDetail(carId);
+            var imageResult = _carImageService.GetAllByCarId(carId);
+            if (result == null || imageResult.Success == false)
+            {
+                return new ErrorDataResult<CarAndImagesDto>(Messages.error);
+            }
+
+            var carDetailAndImagesDto = new CarAndImagesDto
+            {
+                Car = result,
+                CarImages = imageResult.Data
+            };
+
+            return new SuccessDataResult<CarAndImagesDto>(carDetailAndImagesDto, Messages.succeed);
         }
     }
 }
