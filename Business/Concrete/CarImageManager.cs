@@ -26,8 +26,9 @@ namespace Business.Concrete
         {
             _carImageDal = carImage;
         }
-        [SecuredOperation("carimage.add,admin")]
+        //[SecuredOperation("carimage.add,admin")]
         [PerformanceAspect(7)]
+        [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(IFormFile file, CarImage carImage,int carId)
         {
             IResult result = BusinessRules.Run(CheckImageLimitExceeded(carId));

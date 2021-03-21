@@ -24,20 +24,18 @@ namespace Business.Concrete
             _carDAL = carDAL;
             _carImageService = carImageService;
         }
-        [SecuredOperation("car.add,admin")]
+        //[SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("IProductService.Get")]
         [PerformanceAspect(7)]
         public IResult Add(Car car)
         {
-            ValidationTool.Validate(new CarValidator(), car);
-
             _carDAL.Add(car);
             
             return new SuccessResult(Messages.ProductAdded);
         }
         [CacheAspect]
-        [SecuredOperation("car.add,admin")]
+        //[SecuredOperation("car.add,admin")]
         [PerformanceAspect(7)]
         public IDataResult<List<Car>> GetAll()
         {

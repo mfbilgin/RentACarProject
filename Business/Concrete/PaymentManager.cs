@@ -12,7 +12,7 @@ namespace Business.Concrete
     {
         public IResult ReceivePayment(Payment payment)
         {
-            if (payment.Amount > 5000)
+            if (payment.Amount > 25000)
             {
                 return new ErrorResult(Messages.InsufficientBalance);
             }
