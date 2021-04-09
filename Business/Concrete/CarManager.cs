@@ -5,37 +5,42 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
-using System;
 using System.Collections.Generic;
 namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
         ICarDAL _carDAL;
-        private ICarImageService _carImageService;
+        private readonly  ICarImageService _carImageService;
 
-        public CarManager(ICarDAL carDAL, ICarImageService carImageService)
+        public CarManager(ICarDAL carDal, ICarImageService carImageService)
         {
-            _carDAL = carDAL;
+            _carDAL = carDal;
             _carImageService = carImageService;
         }
-        //[SecuredOperation("car.add,admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("IProductService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(7)]
-        public IResult Add(Car car)
+        public IDataResult<Car> Add(Car car)
         {
             _carDAL.Add(car);
-            
-            return new SuccessResult(Messages.ProductAdded);
+            return new SuccessDataResult<Car>(car, Messages.added);
         }
+
+        [CacheRemoveAspect("ICarService.Get")]
+        public IResult Delete(Car car)
+        {
+            _carDAL.Delete(car);
+            return new SuccessResult(Messages.deleted);
+        }
+
         [CacheAspect]
-        //[SecuredOperation("car.add,admin")]
+        //[SecuredOperation("list,admin")]
         [PerformanceAspect(7)]
         public IDataResult<List<Car>> GetAll()
         {
@@ -88,46 +93,23 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == id), Messages.succeed);
         }
 
-        public IResult Delete(int carId)
+
+        [CacheRemoveAspect("ICarService.Get")]
+        [PerformanceAspect(7)]
+        public IResult Update(Car car)
         {
-
-            foreach (var car in _carDAL.GetAll())
-            {
-                if (car.CarId == carId)
-                {
-                    _carDAL.Delete(car);
-                    return new SuccessResult(Messages.ProductDeleted);
-
-                }
-            }
-            return new ErrorResult(Messages.error);
-        }
-
-        public IResult Update(int carId, Car car)
-        {
-            foreach (var _car in _carDAL.GetAll())
-            {
-                if (_car.CarId == carId)
-                {
-                    _car.ColorId = car.ColorId;
-                    _car.BrandId = car.BrandId;
-                    _car.ModelYear = car.ModelYear;
-                    _car.DailyPrice = car.DailyPrice;
-                    _car.Descript = car.Descript;
-                    return new SuccessResult(Messages.updated);
-
-                }
-            }
-            return new SuccessResult(Messages.error);
+            _carDAL.Update(car);
+            return new SuccessResult(Messages.updated);
         }
         [CacheAspect]
         [PerformanceAspect(7)]
-        public IDataResult<List<Car>> GetById(int id)
+        public IDataResult<Car> GetById(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.listed);
+            return new SuccessDataResult<Car>(_carDAL.Get(car=> car.CarId == id), Messages.listed);
         }
 
-        public IDataResult<CarAndImagesDto> GetCarAndImagesDto(int carId)
+        [CacheAspect]
+        public IDataResult<CarAndImagesDto> GetCarAndImagesDtoById(int carId)
         {
             var result = _carDAL.GetCarDetail(carId);
             var imageResult = _carImageService.GetAllByCarId(carId);
@@ -136,13 +118,13 @@ namespace Business.Concrete
                 return new ErrorDataResult<CarAndImagesDto>(Messages.error);
             }
 
-            var carDetailAndImagesDto = new CarAndImagesDto
+            var carAndImagesDto = new CarAndImagesDto
             {
                 Car = result,
                 CarImages = imageResult.Data
             };
 
-            return new SuccessDataResult<CarAndImagesDto>(carDetailAndImagesDto, Messages.succeed);
+            return new SuccessDataResult<CarAndImagesDto>(carAndImagesDto, Messages.succeed);
         }
     }
 }

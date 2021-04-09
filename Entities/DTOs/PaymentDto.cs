@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Core.Entities;
-using Entities.Concrete;
 
 namespace Entities.DTOs
 {
-    public class PaymentDto :IDto
+    public class PaymentDto
     {
-        public Rental Rental { get; set; }
-        public Payment Payment { get; set; }
-
+        public Rental rental { get; set; }
+        public decimal amount { get; set; }
+        public string cardNumber { get; set; }
     }
 }

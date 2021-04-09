@@ -26,9 +26,10 @@ namespace Business.Concrete
         {
             _carImageDal = carImage;
         }
-        //[SecuredOperation("carimage.add,admin")]
+        [SecuredOperation("carimage.add,admin")]
         [PerformanceAspect(7)]
         [ValidationAspect(typeof(CarImageValidator))]
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Add(IFormFile file, CarImage carImage,int carId)
         {
             IResult result = BusinessRules.Run(CheckImageLimitExceeded(carId));
@@ -46,18 +47,13 @@ namespace Business.Concrete
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.succeed);
         }
-
+        //[CacheRemoveAspect("ICarImageService.GetCarImageDetails")]
         public IResult Delete(CarImage carImage)
         {
-            IResult result = BusinessRules.Run(CarImageDelete(carImage));
-            if (result != null)
-            {
-                return result;
-            }
             _carImageDal.Delete(carImage);
             return new SuccessResult();
         }
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<List<CarImage>> GetAll()
         {
@@ -65,20 +61,12 @@ namespace Business.Concrete
         }
             
         //! Refactor Et
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<List<CarImageDto>> GetImagesByCarId(int carId)
         {
-            string path = "/images/default.jpg";
             var result = _carImageDal.GetCarImageDetails(carImage => carImage.CarId == carId).Any();
-            if (!result)
-            {
-                List<CarImageDto> carimage = new List<CarImageDto>();
-                carimage.Add(new CarImageDto { CarId = carId, ImagePath = path });
-                return new SuccessDataResult<List<CarImageDto>>(carimage);
-            }
             return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == carId), Messages.succeed);
-
         }
 
 
@@ -100,7 +88,7 @@ namespace Business.Concrete
 
         private IResult CheckImageLimitExceeded(int id)
         {
-            if (_carImageDal.GetAll(image => image.CarId == id).Count >= 3)
+            if (_carImageDal.GetAll(image => image.CarId == id).Count >= 5)
             {
                 return new ErrorResult(Messages.CarImagesCountExceded);
             }
@@ -108,7 +96,7 @@ namespace Business.Concrete
             return new SuccessResult();
             
         }
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<CarImage> Get(int id)
         {
@@ -116,9 +104,11 @@ namespace Business.Concrete
         }
         private IResult CarImageDelete(CarImage carImage)
         {
+            var newPath = carImage.ImagePath.Replace('/','\\');
+            var secondPath = "C:" + newPath + ".";
             try
             {
-                File.Delete(carImage.ImagePath);
+                File.Delete(secondPath);
             }
             catch (Exception exception)
             {

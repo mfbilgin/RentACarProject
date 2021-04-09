@@ -38,8 +38,16 @@ namespace Business.DependencyResolver.Autofac
             builder.RegisterType<CarImageManager>().As<ICarImageService>().SingleInstance();
             builder.RegisterType<EfCarImageDal>().As<ICarImageDal>().SingleInstance();
 
+            builder.RegisterType<SaveCardManager>().As<ISaveCardService>();
+            builder.RegisterType<EfSaveCardDal>().As<ISaveCardDal>();
+
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JWTHelper>().As<ITokenHelper>();
+
+            builder.RegisterType<DebitCardManager>().As<IDebitCardService>();
+            builder.RegisterType<EfDebitCardDal>().As<IDebitCardDal>();
+
+
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

@@ -27,6 +27,12 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
+        public IResult Delete(Color color)
+        {
+            _colorDAL.Delete(color);
+            return new SuccessResult(Messages.deleted);
+        }
+
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDAL.GetAll());

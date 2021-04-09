@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Business.Abstract;
+﻿using Business.Abstract;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Entities.Concrete;
-using System.Threading;
 
 namespace WebAPI.Controllers
 {
@@ -44,7 +38,7 @@ namespace WebAPI.Controllers
         [HttpGet("getcardetailbyId")]
         public IActionResult GetCarDetail(int carId)
         {
-            var result = _carService.GetCarAndImagesDto(carId);
+            var result = _carService.GetCarAndImagesDtoById(carId);
             if (result.Success)
                 return Ok(result);
             else
@@ -70,6 +64,17 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("getcarbyid")]
+        public IActionResult GetCarById(int carId)
+        {
+            var result = _carService.GetById(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
 
         [HttpPost("add")]
         public IActionResult Add(Car car)
@@ -81,20 +86,23 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpPost("delete")]
         public IActionResult Delete(Car car)
         {
-            var result = _carService.Delete(car.CarId);
+            var result = _carService.Delete(car);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
+
+
         [HttpPost("update")]
-        public IActionResult Update(int id, Car car)
+        public IActionResult Update(Car car)
         {
-            var result = _carService.Update(id, car);
+            var result = _carService.Update(car);
             if (result.Success)
             {
                 return Ok(result);

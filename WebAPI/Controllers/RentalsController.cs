@@ -17,12 +17,10 @@ namespace WebAPI.Controllers
     public class RentalsController : ControllerBase
     {
         IRentalService _rentalService;
-        private IPaymentService _paymentService;
 
-        public RentalsController(IRentalService rentalService,IPaymentService paymentService)
+        public RentalsController(IRentalService rentalService)
         {
             _rentalService = rentalService;
-            _paymentService = paymentService;
         }
 
         [HttpGet("getall")]
@@ -94,24 +92,6 @@ namespace WebAPI.Controllers
 
             return BadRequest(result.Message);
         }
-        [HttpPost("paymentadd")]
-        [TransactionScopeAspect]
-        public ActionResult PaymentAdd(PaymentDto paymentDto)
-        { 
-            var paymentResult = _paymentService.ReceivePayment(paymentDto.Payment);
-            if (!paymentResult.Success)
-            {
-                return BadRequest(paymentResult);
-            }
-            var result = _rentalService.Add(paymentDto.Rental);
 
-            if (result.Success)
-                return Ok(result);
-            else
-            {
-                throw new System.Exception(result.Message);
-                //return BadRequest(result);                    
-            }
-        }
     }
 }

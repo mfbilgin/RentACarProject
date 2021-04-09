@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
 
 namespace WebAPI
 {
@@ -37,6 +38,22 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("WebAPI", new OpenApiInfo // Bu k�s�mda d�k�manda kullan�lacak bilgileri tan�ml�yoruz.Versiyon,Ba�l�k,A��klama,Servis gibi bilgileri yazabiliriz.
+                { //Burada dikkat edilmesi gereken konu yukar�da parametre olarak ge�irdi�imizi "ProductApi". Burada verdi�iniz de�er ile a�a��da configure i�erisinde swagger�n json dosyas�n�n pathini verirken kulland���m�z de�er ayn� olmal�
+                    Version = "v1",
+                    Title = "WebAPI",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Muhammet Bilgin",
+                        Email = "mf.bilgin0@gmail.com",
+                        Url = new Uri("https://www.google.com"),
+                    },
+                });
+            });
             //AOP
             //Autofac, Ninject,CastleWindsor, StructureMap, LightInject, DryInject -->IoC Container
             //AOP
@@ -92,6 +109,11 @@ namespace WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            app.UseSwagger(); 
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/WebAPI/swagger.json", "WebAPI"); 
             });
         }
     }

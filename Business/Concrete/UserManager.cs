@@ -10,8 +10,10 @@ using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -29,10 +31,24 @@ namespace Business.Concrete
             return _userDAL.GetClaims(user);
         }
 
+        public IDataResult<List<User>> GetByEmail(string email)
+        {
+            return new SuccessDataResult<List<User>>(_userDAL.GetAll(user => user.Email == email));
+        }
+
+        public IDataResult<User> GetByUserId(int userId)
+        {
+            return new SuccessDataResult<User>(_userDAL.Get(user => user.UserId == userId));
+        }
         public void Add(User user)
         {
             _userDAL.Add(user);
 
+        }
+        public IResult Update(User user)
+        {
+            _userDAL.Update(user);
+            return new SuccessResult(Messages.updated);
         }
 
         public User GetByMail(string email)
@@ -40,9 +56,34 @@ namespace Business.Concrete
             return _userDAL.Get(u => u.Email == email);
         }
 
+        public IResult AddFindexPoint(int userId)
+        {
+            var result = GetByUserId(userId);
+            
+                if (result.Data.FindexPoint < 1900)
+                {
+                    result.Data.FindexPoint += 50;
+                    Update(result.Data);
+                }
+                else
+                {
+                    return new ErrorResult(Messages.findexPointMax);
+                }
+
+            
+            return new SuccessResult(Messages.findexPointAdd);
+
+        }
+
+
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDAL.GetAll());
+        }
+
+        public IDataResult<List<OperationClaim>> GetClaimById(int userId)
+        {
+            return new SuccessDataResult<List<OperationClaim>>(_userDAL.GetClaimById(userId));
         }
     }
 }

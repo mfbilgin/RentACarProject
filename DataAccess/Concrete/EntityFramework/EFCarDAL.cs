@@ -35,6 +35,10 @@ namespace DataAccess.Concrete.EntityFramework
                                  ColorName = color.ColorName,
 
                                  BrandName = brand.BrandName,
+
+                                 MinFindex = car.MinFindex,
+
+                                 ImagePath = context.CarImages.Where(image => image.CarId == car.CarId).FirstOrDefault().ImagePath
                              };
                 return result.ToList();
             }
@@ -57,7 +61,9 @@ namespace DataAccess.Concrete.EntityFramework
                                  Description = car.Descript,
                                  ModelYear = car.ModelYear,
                                  CarId = car.CarId,
-                                 Status = !context.Rentals.Any(rental => rental.CarId == carId && rental.ReturnDate == null)
+                                 Status = !context.Rentals.Any(rental => rental.CarId == carId && rental.ReturnDate > DateTime.Now && rental.RentDate < DateTime.Now.AddDays(1)),
+                                 MinFindex =  car.MinFindex,
+                              
                              };
 
                 return result.SingleOrDefault();

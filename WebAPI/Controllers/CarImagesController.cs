@@ -50,20 +50,21 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpPost("add")]
-        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile file, [FromForm(Name = ("carId"))] int id, [FromForm] CarImage carImage)
+        public IActionResult Add([FromForm(Name = ("file"))] IFormFile file, [FromForm(Name = ("carId"))] int id, [FromForm] CarImage carImage)
         {
             var result = _CarImageService.Add(file, carImage, id);
             if (result.Success)
             {
                 return Ok(result);
+
             }
             return BadRequest(result);
         }
-        [HttpDelete("delete")]
-        public IActionResult Delete([FromForm(Name = ("Id"))] int Id)
+        [HttpPost("delete")]
+        public IActionResult Delete([FromBody] int imageId)
         {
 
-            var carImage = _CarImageService.Get(Id).Data;
+            var carImage = _CarImageService.Get(imageId).Data;
 
             var result = _CarImageService.Delete(carImage);
             if (result.Success)

@@ -13,6 +13,8 @@ using Core.Utilities.Business;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Threading;
 using Entities.DTOs;
+using Core.Aspects.Autofac.Caching;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
@@ -24,7 +26,6 @@ namespace Business.Concrete
         {
             _rentalDal = rentalDAL;
         }
-
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());  
@@ -34,23 +35,20 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r => r.RentalId == rentalId));
         }
+        [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
         {
-            var result = BusinessRules.Run(CheckIfReturnDateNull(rental.CarId));
+            var returnDate = rental.ReturnDate;
+            rental.ReturnDate = DateTime.MinValue;
+            var result = BusinessRules.Run(CheckIfReturnDateNull(rental.CarId),CheckIfReturnDateGreaterThanNow(rental));
             if (result != null)
             {
                 return result;
             }
-            if (rental.RentDate == null)
-            {
-            rental.RentDate = DateTime.Now;
-            }
-            else if (rental.RentDate != null)
-            {
-            _rentalDal.Add(rental);
-            }
 
+            rental.ReturnDate = returnDate;
+            _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalSuccess);  
         }
 
@@ -60,6 +58,7 @@ namespace Business.Concrete
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.updated);
         }
+        [CacheRemoveAspect("ICarService.Get")]
 
         public IResult Delete(Rental rental)
         {
@@ -78,7 +77,19 @@ namespace Business.Concrete
 
             return new SuccessResult();
         }
+        private IResult CheckIfReturnDateGreaterThanNow(Rental rental)
+        {
+            var result = _rentalDal.GetAll(r => rental.ReturnDate > DateTime.Now).Any();
 
+            if (result)
+            {
+                return new ErrorResult(Messages.ReturnDateError);
+            }
+
+            return new SuccessResult();
+        }
+
+        [SecuredOperation("admin")]
         public IDataResult<List<RentalDetailDto>> GetRentalDetail()
         {
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());

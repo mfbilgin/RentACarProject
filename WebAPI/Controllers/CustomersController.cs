@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
             var result = _customerService.GetByCustomerId(customerID);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
             return BadRequest(result.Message);
         }
@@ -61,7 +61,7 @@ namespace WebAPI.Controllers
             var result = _customerService.GetByUserId(userId);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
             return BadRequest(result.Message);
         }
@@ -70,6 +70,17 @@ namespace WebAPI.Controllers
         public IActionResult Add(Customer customer)
         {
             var result = _customerService.Add(customer);
+            if (result.Success)
+            {
+                return Ok(result.Message);
+            }
+
+            return BadRequest(result.Message);
+        }
+        [HttpPost("update")]
+        public IActionResult Update(Customer customer)
+        {
+            var result = _customerService.Update(customer);
             if (result.Success)
             {
                 return Ok(result.Message);

@@ -35,7 +35,7 @@ namespace Core.Utilities.FileHelper
         }
         public static IResult Delete(string path)
         {
-            DeleteOldImageFile((_currentDirectory + path).Replace("/", "\\"));
+            DeleteOldImageFile((path).Replace("/", "\\"));
             return new SuccessResult();
         }
         private static void DeleteOldImageFile(string directory)

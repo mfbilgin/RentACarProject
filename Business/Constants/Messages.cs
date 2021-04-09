@@ -16,25 +16,30 @@ namespace Business.Constants
         public static string ReturnDateError = "Araç henüz teslim edilmemiş.";
         public static string RentalSuccess = "Araç kiralama listesine eklendi.";
         public static string CarImagesCountExceded = "Bir aracın en fazla 5 resmi olabilir.";
-        public static string added = "eklendi";
-        public static string deleted = "silindi";
-        public static string updated = "güncellendi";
-        public static string error = "hata";
-        public static string listed = "listelendi";
-        public static string succeed = "başarılı";
+        public static string added = "Eklendi";
+        public static string deleted = "Silindi";
+        public static string updated = "Güncellendi";
+        public static string error = "Hata";
+        public static string listed = "Listelendi";
+        public static string succeed = "İşlem Başarılı";
 
         public static string UserNotFound = "Kullanıcı Bulunamadı.";
+        public static string PasswordSame = "Eski şifre ile yeni şifre aynı";
         public static string PasswordError = "Parola Hatalı";
         public static string SuccessfulLogin = "Giriş Yapıldı";
         public static string UserAlreadyExists = "Bu kullanıcı zaten var.";
-        public static string UserRegistered = "Kullanıcı oluştuldu";
-        public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
+        public static string UserRegistered = "Kayıt Oluşturuldu";
+        public static string AccessTokenCreated = "Giriş Başarılı";
         public static string AuthorizationDenied = "Bu işlem için yetkiniz bulunmuyor";
         public static string[] ValidImageFileTypes = { ".JPG", ".JPEG", ".PNG", ".TIF", ".TIFF", ".GIF", ".BMP", ".ICO" };
 
 
         public static string InsufficientBalance = "Yetersiz bakiye";
-
-        public static string PaymentCompleted = "Ödeme yapıldı";
+        public static string CardInfoSuccess = "Kart Bilgileri Doğrulandı";
+        public static string PaymentCompleted = "Ödeme Başarılı";
+        public static string cardInfoError = "Kart Bilgileri Hatalı";
+        public static string CardExist = "Kart Zaten Kayıtlı";
+        public static string findexPointAdd = "Tebrikler 50 Findex Puan'ı kazandınız";
+        public static string findexPointMax = "Findex Puanınız Zaten En Yüksek Değerde";
     }
 }

@@ -29,12 +29,12 @@ namespace Business.Concrete
 
         public IDataResult<List<Customer>> GetByCustomerId(int CustomerId)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.CustomerId == CustomerId));
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(customer => customer.CustomerId == CustomerId));
         }
 
         public IDataResult<List<Customer>> GetByUserId(int UserId)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.UserId == UserId));
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(customer => customer.UserId == UserId));
         }
 
 
@@ -43,6 +43,12 @@ namespace Business.Concrete
         {
             _customerDal.Add(customer);
             return new SuccessResult(Messages.ProductAdded);
+        }
+
+        public IResult Update(Customer customer)
+        {
+            _customerDal.Update(customer);
+            return new SuccessResult(Messages.updated);
         }
 
         public IDataResult<List<CustomerDetailDto>> GetCustomerDetail()

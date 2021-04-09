@@ -21,7 +21,8 @@ namespace DataAccess.Concrete.EntityFramework
                         select new CarImageDto
                         {   
                             CarId = car.CarId,
-                            ImagePath = image.ImagePath
+                            ImagePath = image.ImagePath,
+                            Id = image.Id
                         };
                     return result.ToList();
                 }

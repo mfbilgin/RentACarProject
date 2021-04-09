@@ -27,6 +27,12 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
+        public IResult Delete(Brand brand)
+        {
+            _brandDAL.Delete(brand);
+            return new SuccessResult(Messages.deleted);
+        }
+
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDAL.GetAll());
