@@ -108,7 +108,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Car>(_carDAL.Get(car=> car.CarId == id), Messages.listed);
         }
 
-        [CacheAspect]
+        //[CacheAspect]
         public IDataResult<CarAndImagesDto> GetCarAndImagesDtoById(int carId)
         {
             var result = _carDAL.GetCarDetail(carId);
