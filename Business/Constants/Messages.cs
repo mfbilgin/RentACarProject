@@ -39,7 +39,7 @@ namespace Business.Constants
         public static string PaymentCompleted = "Ödeme Başarılı";
         public static string cardInfoError = "Kart Bilgileri Hatalı";
         public static string CardExist = "Kart Zaten Kayıtlı";
-        public static string findexPointAdd = "Tebrikler 50 Findex Puan'ı kazandınız";
+        public static string findexPointAdd = "Tebrikler 20 Findex Puan'ı kazandınız";
         public static string findexPointMax = "Findex Puanınız Zaten En Yüksek Değerde";
     }
 }

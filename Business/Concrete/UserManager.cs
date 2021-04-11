@@ -62,7 +62,7 @@ namespace Business.Concrete
             
                 if (result.Data.FindexPoint < 1900)
                 {
-                    result.Data.FindexPoint += 50;
+                    result.Data.FindexPoint += 20;
                     Update(result.Data);
                 }
                 else
