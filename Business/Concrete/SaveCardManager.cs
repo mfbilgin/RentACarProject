@@ -26,7 +26,7 @@ namespace Business.Concrete
                 return result;
             }
             _saveCardDal.Add(debitCard);
-            return new SuccessResult(Messages.added);
+            return new SuccessResult(Messages.SavedCardAdded);
         }
 
         public IDataResult<List<SavedDebitCard>> GetAll()

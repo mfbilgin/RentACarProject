@@ -41,26 +41,26 @@ namespace Business.Concrete
             {
                 return new SuccessResult(Messages.CardInfoSuccess);
             }
-            return new ErrorResult(Messages.cardInfoError);
+            return new ErrorResult(Messages.CardInfoError);
         }
 
         [PerformanceAspect(7)]
         public IResult Add(DebitCard debitCard)
         {
             _debitCardDal.Add(debitCard);
-            return new SuccessResult(Messages.added);
+            return new SuccessResult(Messages.CardAdded);
         }
         [PerformanceAspect(7)]
         public IResult Delete(DebitCard debitCard)
         {
             _debitCardDal.Delete(debitCard);
-            return new SuccessResult(Messages.deleted);
+            return new SuccessResult(Messages.CardUpdated);
         }
         [PerformanceAspect(7)]
         public IResult Update(DebitCard debitCard)
         {
             _debitCardDal.Update(debitCard);
-            return new SuccessResult(Messages.updated);
+            return new SuccessResult(Messages.CardUpdated);
         }
         [PerformanceAspect(7)]
         public IResult AddBalance(decimal amount, int cardId)
@@ -72,7 +72,7 @@ namespace Business.Concrete
                 Update(card);
             }
 
-            return new SuccessResult(Messages.succeed);
+            return new SuccessResult(Messages.BalanceAdded);
         }
         [PerformanceAspect(7)]
         public IResult DecreaseBalance(decimal amount, int cardId)
@@ -92,7 +92,7 @@ namespace Business.Concrete
 
             }
 
-            return new SuccessResult(Messages.succeed);
+            return new SuccessResult(Messages.BalanceDecrased);
         }
         [PerformanceAspect(7)]
         public IDataResult<List<DebitCard>> GetByCardId(int cardId)

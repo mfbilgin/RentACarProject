@@ -24,7 +24,7 @@ namespace Business.Concrete
         }
         public IDataResult<List<Customer>> GetAll()
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(),Messages.ProductsListed);
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
 
         public IDataResult<List<Customer>> GetByCustomerId(int CustomerId)
@@ -42,13 +42,13 @@ namespace Business.Concrete
         public IResult Add(Customer customer)
         {
             _customerDal.Add(customer);
-            return new SuccessResult(Messages.ProductAdded);
+            return new SuccessResult(Messages.CustomerAdded);
         }
 
         public IResult Update(Customer customer)
         {
             _customerDal.Update(customer);
-            return new SuccessResult(Messages.updated);
+            return new SuccessResult(Messages.CustomerUpdated);
         }
 
         public IDataResult<List<CustomerDetailDto>> GetCustomerDetail()

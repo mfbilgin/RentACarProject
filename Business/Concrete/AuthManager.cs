@@ -93,7 +93,7 @@ namespace Business.Concrete
             userToCheck.PasswordHash = passwordHash;
             userToCheck.PasswordSalt = passwordSalt;
             _userService.Update(userToCheck);
-            return new SuccessResult(Messages.updated);
+            return new SuccessResult(Messages.ChangePassword);
         }
     }
 }

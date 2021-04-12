@@ -45,7 +45,7 @@ namespace Business.Concrete
             }
             carImage.ImagePath = imageResult.Message;
             _carImageDal.Add(carImage);
-            return new SuccessResult(Messages.succeed);
+            return new SuccessResult(Messages.ImageAdded);
         }
         //[CacheRemoveAspect("ICarImageService.GetCarImageDetails")]
         public IResult Delete(CarImage carImage)
@@ -57,7 +57,7 @@ namespace Business.Concrete
         [PerformanceAspect(7)]
         public IDataResult<List<CarImage>> GetAll()
         {
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(), Messages.listed);
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
             
         //! Refactor Et
@@ -66,7 +66,7 @@ namespace Business.Concrete
         public IDataResult<List<CarImageDto>> GetImagesByCarId(int carId)
         {
             var result = _carImageDal.GetCarImageDetails(carImage => carImage.CarId == carId).Any();
-            return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == carId), Messages.succeed);
+            return new SuccessDataResult<List<CarImageDto>>(_carImageDal.GetCarImageDetails(p => p.CarId == carId));
         }
 
 

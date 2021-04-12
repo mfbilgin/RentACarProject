@@ -29,14 +29,14 @@ namespace Business.Concrete
         public IDataResult<Car> Add(Car car)
         {
             _carDAL.Add(car);
-            return new SuccessDataResult<Car>(car, Messages.added);
+            return new SuccessDataResult<Car>(Messages.CarAdded);
         }
 
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)
         {
             _carDAL.Delete(car);
-            return new SuccessResult(Messages.deleted);
+            return new SuccessResult(Messages.CarDeleted);
         }
 
         [CacheAspect]
@@ -44,7 +44,7 @@ namespace Business.Concrete
         [PerformanceAspect(7)]
         public IDataResult<List<Car>> GetAll()
         {
-            return new SuccessDataResult<List<Car>>(_carDAL.GetAll(), Messages.ProductsListed);
+            return new SuccessDataResult<List<Car>>(_carDAL.GetAll());
         }
 
         [CacheAspect]
@@ -71,26 +71,26 @@ namespace Business.Concrete
         [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(), Messages.succeed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails());
         }
 
         [CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarDetailsById(int id)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.CarId == id), Messages.succeed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.CarId == id));
         }
         [CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int id)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.BrandId == id), Messages.succeed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.BrandId == id));
         }
         [CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<List<CarDetailDto>> GetCarsByColorId(int id)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == id), Messages.succeed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDAL.GetAllCarDetails(c => c.ColorId == id));
         }
 
 
@@ -99,13 +99,13 @@ namespace Business.Concrete
         public IResult Update(Car car)
         {
             _carDAL.Update(car);
-            return new SuccessResult(Messages.updated);
+            return new SuccessResult(Messages.CarUpdated);
         }
         [CacheAspect]
         [PerformanceAspect(7)]
         public IDataResult<Car> GetById(int id)
         {
-            return new SuccessDataResult<Car>(_carDAL.Get(car=> car.CarId == id), Messages.listed);
+            return new SuccessDataResult<Car>(_carDAL.Get(car=> car.CarId == id));
         }
 
         //[CacheAspect]
@@ -115,7 +115,7 @@ namespace Business.Concrete
             var imageResult = _carImageService.GetAllByCarId(carId);
             if (result == null || imageResult.Success == false)
             {
-                return new ErrorDataResult<CarAndImagesDto>(Messages.error);
+                return new ErrorDataResult<CarAndImagesDto>(Messages.CarMissmatch);
             }
 
             var carAndImagesDto = new CarAndImagesDto
@@ -124,7 +124,7 @@ namespace Business.Concrete
                 CarImages = imageResult.Data
             };
 
-            return new SuccessDataResult<CarAndImagesDto>(carAndImagesDto, Messages.succeed);
+            return new SuccessDataResult<CarAndImagesDto>(carAndImagesDto);
         }
     }
 }

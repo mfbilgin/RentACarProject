@@ -48,7 +48,7 @@ namespace Business.Concrete
         public IResult Update(User user)
         {
             _userDAL.Update(user);
-            return new SuccessResult(Messages.updated);
+            return new SuccessResult(Messages.UserUpdated);
         }
 
         public User GetByMail(string email)
@@ -67,11 +67,11 @@ namespace Business.Concrete
                 }
                 else
                 {
-                    return new ErrorResult(Messages.findexPointMax);
+                    return new ErrorResult(Messages.FindexPointMax);
                 }
 
             
-            return new SuccessResult(Messages.findexPointAdd);
+            return new SuccessResult(Messages.FindexPointAdd);
 
         }
 

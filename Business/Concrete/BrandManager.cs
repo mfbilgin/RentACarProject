@@ -24,13 +24,13 @@ namespace Business.Concrete
         public IResult Add(Brand brand)
         {
             _brandDAL.Add(brand);
-            return new SuccessResult(Messages.ProductAdded);
+            return new SuccessResult(Messages.BrandAdded);
         }
 
         public IResult Delete(Brand brand)
         {
             _brandDAL.Delete(brand);
-            return new SuccessResult(Messages.deleted);
+            return new SuccessResult(Messages.BrandDeleted);
         }
 
         public IDataResult<List<Brand>> GetAll()

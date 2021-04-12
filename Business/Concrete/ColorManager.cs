@@ -24,13 +24,13 @@ namespace Business.Concrete
         public IResult Add(Color color)
         {
             _colorDAL.Add(color);
-            return new SuccessResult(Messages.ProductAdded);
+            return new SuccessResult(Messages.ColorAdded);
         }
 
         public IResult Delete(Color color)
         {
             _colorDAL.Delete(color);
-            return new SuccessResult(Messages.deleted);
+            return new SuccessResult(Messages.ColorDeleted);
         }
 
         public IDataResult<List<Color>> GetAll()

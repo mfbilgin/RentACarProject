@@ -56,14 +56,14 @@ namespace Business.Concrete
         {
             rental.ReturnDate = DateTime.Now;
             _rentalDal.Update(rental);
-            return new SuccessResult(Messages.updated);
+            return new SuccessResult(Messages.RentalUpdated);
         }
         [CacheRemoveAspect("ICarService.Get")]
 
         public IResult Delete(Rental rental)
         {
             _rentalDal.Delete(rental);
-            return new SuccessResult(Messages.ProductDeleted);
+            return new SuccessResult(Messages.RentalDeleted);
         }
 
         private IResult CheckIfReturnDateNull(int carId)
