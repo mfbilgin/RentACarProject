@@ -20,7 +20,7 @@
     "WebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/cars/getall",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

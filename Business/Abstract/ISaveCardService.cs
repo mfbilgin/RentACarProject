@@ -9,6 +9,8 @@ namespace Business.Abstract
     public interface ISaveCardService
     {
         IResult Add(SavedDebitCard debitCard);
+        IResult Delete(SavedDebitCard debitCard);
+
         IDataResult<List<SavedDebitCard>> GetAll();
         IDataResult<List<SavedDebitCard>> GetByUserId(int userId);
         IDataResult<SavedDebitCard> GetByCardNumber(string cardNumber);

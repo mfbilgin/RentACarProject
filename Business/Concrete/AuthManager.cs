@@ -46,11 +46,17 @@ namespace Business.Concrete
             if (userToCheck == null)
             {
                 return new ErrorDataResult<User>(Messages.UserNotFound);
-            }
+            }  
+            
 
             if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
             {
                 return new ErrorDataResult<User>(Messages.PasswordError);
+            }
+
+            if (!userToCheck.Status)
+            {
+                return new ErrorDataResult<User>(Messages.UserBlocked);
             }
 
             return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
@@ -94,6 +100,27 @@ namespace Business.Concrete
             userToCheck.PasswordSalt = passwordSalt;
             _userService.Update(userToCheck);
             return new SuccessResult(Messages.ChangePassword);
+        }
+
+        public IResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            byte[] passwordHash, passwordSalt;
+            var userToCheck = _userService.GetByEmail(forgotPasswordDto.Email).Data;
+            if(userToCheck == null)
+            {
+                return new ErrorResult(Messages.UserNotFound);
+            }
+
+            if (forgotPasswordDto.Password != forgotPasswordDto.RepeatPassword)
+            {
+                return new ErrorResult(Messages.PasswordNotSame);
+            }
+            HashingHelper.CreatePasswordHash(forgotPasswordDto.Password, out passwordHash, out passwordSalt);
+            userToCheck.PasswordHash = passwordHash;
+            userToCheck.PasswordSalt = passwordSalt;
+            _userService.Update(userToCheck);
+            return new SuccessResult(Messages.ChangePassword);
+
         }
     }
 }

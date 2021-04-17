@@ -55,5 +55,15 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpPost("delete")]
+        public IActionResult Delete(SavedDebitCard savedDebitCard)
+        {
+            var result = _saveCardService.Delete(savedDebitCard);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

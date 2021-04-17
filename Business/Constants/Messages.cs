@@ -1,13 +1,8 @@
-﻿using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Core.Utilities.Results;
-
-namespace Business.Constants
+﻿namespace Business.Constants
 {
     public static class Messages
     {
+
         // # Message of Car # //
         public const string CarAdded = "Araç Sisteme Eklendi";
         public const string CarDeleted = "Araç Sistemden Silindi";
@@ -38,6 +33,7 @@ namespace Business.Constants
 
         // # Messages of User # //
         public const string PasswordSame = "Eski şifre ile yeni şifre aynı";
+        public const string PasswordNotSame = "Şifreler Uyuşmuyor";
         public const string PasswordError = "Parola Hatalı";
         public const string ChangePassword = "Şifre Başarıyla Değiştirildi";
         public const string SuccessfulLogin = "Giriş Yapıldı";
@@ -47,6 +43,10 @@ namespace Business.Constants
         public const string AccessTokenCreated = "Giriş Başarılı";
         public const string AuthorizationDenied = "Bu işlem için yetkiniz bulunmuyor";
         public const string UserUpdated = "Kullanıcı Bilgileriniz Güncellendi";
+        public const string UserOperationClaimAdded = "Yetki Belirlendi";
+        public const string UserBlocked = "Bu Hesap Askıya Alınmış";
+
+
 
 
         // # Messages pf Customer # //
@@ -57,13 +57,15 @@ namespace Business.Constants
         // # Messages of SavedCard # //
         public const string CardExist = "Kart Zaten Kayıtlı";
         public const string SavedCardAdded = "Kart Sisteme Kaydedildi";
+        public const string SavedCardDeleted ="Kart Sistemden Silindi";
+
 
 
         // #Messages of DebitCard # //
         public const string CardAdded = "Kart Sisteme Eklendi";
         public const string CardDeleted = "Kart Sistemden Silindi";
         public const string CardInfoSuccess = "Kart Bilgileri Doğrulandı";
-        public const string CardInfoError = "Kart Bilgileri Hatalı";
+        public const string CardInfoError = "Bankanız Kartınızı Onaylayamadı";
         public const string CardUpdated = "Kart Bilgileri Güncellendi";
         public const string BalanceAdded = "Karta Bakiye Yüklendi";
         public const string InsufficientBalance = "Yetersiz bakiye";

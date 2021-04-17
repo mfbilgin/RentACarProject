@@ -31,9 +31,9 @@ namespace Business.Concrete
             return _userDAL.GetClaims(user);
         }
 
-        public IDataResult<List<User>> GetByEmail(string email)
+        public IDataResult<User> GetByEmail(string email)
         {
-            return new SuccessDataResult<List<User>>(_userDAL.GetAll(user => user.Email == email));
+            return new SuccessDataResult<User>(_userDAL.Get(user => user.Email == email));
         }
 
         public IDataResult<User> GetByUserId(int userId)
@@ -74,8 +74,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.FindexPointAdd);
 
         }
-
-
+        
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDAL.GetAll());

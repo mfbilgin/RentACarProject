@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework.Context;
 using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfSaveCardDal : EfEntityRepositoryBase<SavedDebitCard, RentACarContext>, ISaveCardDal
+    public class EfSaveCardDal : EfEntityRepositoryBase<SavedDebitCard,RentACarContext>, ISaveCardDal
     {
     }
 }

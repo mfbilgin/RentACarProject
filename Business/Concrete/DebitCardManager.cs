@@ -1,21 +1,17 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspects.Autofac;
 using Business.Constants;
-using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Performance;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Business.Concrete
 {
    public class DebitCardManager:IDebitCardService
    {
-        IDebitCardDal _debitCardDal;
-        IRentalService _rentalService;
+       private readonly IDebitCardDal _debitCardDal;
+       private readonly IRentalService _rentalService;
 
         public DebitCardManager(IDebitCardDal debitCardDal, IRentalService rentalService)
         {
@@ -26,7 +22,7 @@ namespace Business.Concrete
         [PerformanceAspect(7)]
         public IDataResult<DebitCard> GetByCardNumber(string cardNumber)
         {
-            return new SuccessDataResult<DebitCard>(_debitCardDal.Get(dc=> dc.CardNumber == cardNumber));
+            return new SuccessDataResult<DebitCard>(_debitCardDal.Get(dc => dc.CardNumber == cardNumber));
         }
         [PerformanceAspect(7)]
         public IDataResult<List<DebitCard>> GetAll()
@@ -34,14 +30,20 @@ namespace Business.Concrete
             return new SuccessDataResult<List<DebitCard>>(_debitCardDal.GetAll());
         }
 
-        public IResult CheckCard(string cardNumber) 
+        public IDataResult<DebitCard> CheckCard(DebitCard card) 
         {
-            var result = GetByCardNumber(cardNumber);
-            if (result != null)
+            var checkByNumber = _debitCardDal.Get(dc => dc.CardNumber == card.CardNumber);
+            var checkByExprationDate = _debitCardDal.Get(dc => dc.ExpirationDate == card.ExpirationDate);
+            var checkByCvv = _debitCardDal.Get(dc => dc.CVV == card.CVV);
+            var checkByFirstName = _debitCardDal.Get(dc => dc.CardholderName == card.CardholderName);
+            var checkByLastName = _debitCardDal.Get(dc => dc.CardholderLastName == card.CardholderLastName);
+            if (checkByNumber == null || checkByExprationDate == null || checkByCvv == null || checkByFirstName == null || checkByLastName == null )
             {
-                return new SuccessResult(Messages.CardInfoSuccess);
+                return new ErrorDataResult<DebitCard>(checkByNumber,Messages.CardInfoError);
+
             }
-            return new ErrorResult(Messages.CardInfoError);
+            return new SuccessDataResult<DebitCard>(checkByNumber,Messages.CardInfoSuccess);
+
         }
 
         [PerformanceAspect(7)]
@@ -65,57 +67,47 @@ namespace Business.Concrete
         [PerformanceAspect(7)]
         public IResult AddBalance(decimal amount, int cardId)
         {
-            var result = GetByCardId(cardId);
-            foreach (var card in result.Data)
-            {
-                card.Balance += amount;
-                Update(card);
-            }
-
+            var card = GetByCardId(cardId).Data;
+            card.Balance += amount;
+            Update(card);
             return new SuccessResult(Messages.BalanceAdded);
         }
         [PerformanceAspect(7)]
         public IResult DecreaseBalance(decimal amount, int cardId)
         {
-            var result = GetByCardId(cardId);
-            foreach (var card in result.Data)
+            var card = GetByCardId(cardId).Data;
+           
+            if (card.Balance >= amount)
             {
-                if (card.Balance >= amount)
-                {
-                    card.Balance -= amount;
-                    Update(card);
-                }
-                else
-                {
-                    return new ErrorResult(Messages.InsufficientBalance);
-                }
-
+                card.Balance -= amount;
+                Update(card);
             }
-
+            else
+            { 
+                return new ErrorResult(Messages.InsufficientBalance);
+            }
+            
             return new SuccessResult(Messages.BalanceDecrased);
         }
         [PerformanceAspect(7)]
-        public IDataResult<List<DebitCard>> GetByCardId(int cardId)
+        public IDataResult<DebitCard> GetByCardId(int cardId)
         {
-            return new SuccessDataResult<List<DebitCard>>(_debitCardDal.GetAll(dc => dc.DebitCardId == cardId));
+            return new SuccessDataResult<DebitCard>(_debitCardDal.Get(dc => dc.DebitCardId == cardId));
         }
 
-        public IResult AddRental(string cardNumber, Rental rental,decimal amount)
+        public IResult AddRental(DebitCard debitCard, Rental rental,decimal amount)
         {
-            IResult decraseBalance = new ErrorResult();
-                var result = CheckCard(cardNumber);
-
+            var result = CheckCard(debitCard);
             if (result.Success)
             {
-                var card = GetByCardNumber(cardNumber).Data;
-
-                decraseBalance = DecreaseBalance(amount, card.DebitCardId);
-                  if (decraseBalance.Success)
-                {
-                    _rentalService.Add(rental);
-                    return new SuccessResult(decraseBalance.Message);
-                }
-                return new ErrorResult(decraseBalance.Message);
+               var decraseBalance = DecreaseBalance(amount, result.Data.DebitCardId);
+               var addBalancetoMe = AddBalance(amount,1);
+                  if (decraseBalance.Success || addBalancetoMe.Success)
+                  {
+                      _rentalService.Add(rental);
+                      return new SuccessResult(Messages.RentalSuccess);
+                  }
+                  return new ErrorResult(decraseBalance.Message);
                 
             }
             return new ErrorResult(result.Message);

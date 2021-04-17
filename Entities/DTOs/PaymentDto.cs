@@ -7,8 +7,8 @@ namespace Entities.DTOs
 {
     public class PaymentDto
     {
-        public Rental rental { get; set; }
-        public decimal amount { get; set; }
-        public string cardNumber { get; set; }
+        public Rental Rental { get; set; }
+        public decimal Amount { get; set; }
+        public DebitCard DebitCard { get; set; }
     }
 }

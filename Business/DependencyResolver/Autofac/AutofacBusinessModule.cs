@@ -18,16 +18,16 @@ namespace Business.DependencyResolver.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CarManager>().As<ICarService>().SingleInstance();
-            builder.RegisterType<EFCarDAL>().As<ICarDAL>().SingleInstance();
+            builder.RegisterType<EfCarDal>().As<ICarDAL>().SingleInstance();
 
             builder.RegisterType<BrandManager>().As<IBrandService>().SingleInstance();
-            builder.RegisterType<EFBrandDAL>().As<IBrandDAL>().SingleInstance();
+            builder.RegisterType<EfBrandDal>().As<IBrandDAL>().SingleInstance();
 
             builder.RegisterType<ColorManager>().As<IColorService>().SingleInstance();
-            builder.RegisterType<EFColorDAL>().As<IColorDAL>().SingleInstance();
+            builder.RegisterType<EfColorDal>().As<IColorDAL>().SingleInstance();
 
             builder.RegisterType<CustomerManager>().As<ICustomerService>().SingleInstance();
-            builder.RegisterType<EFCustomerDAL>().As<ICustomerDAL>().SingleInstance();
+            builder.RegisterType<EfCustomerDal>().As<ICustomerDAL>().SingleInstance();
 
             builder.RegisterType<RentalManager>().As<IRentalService>().SingleInstance();
             builder.RegisterType<EfRentalDal>().As<IRentalDAL>().SingleInstance();
@@ -46,6 +46,12 @@ namespace Business.DependencyResolver.Autofac
 
             builder.RegisterType<DebitCardManager>().As<IDebitCardService>();
             builder.RegisterType<EfDebitCardDal>().As<IDebitCardDal>();
+
+            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>();
+            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>();
+
+            builder.RegisterType<OperationClaimManager>().As<IOperationClaimService>();
+            builder.RegisterType<EfOperationClaimDal>().As<IOperationClaimDal>();
 
 
 

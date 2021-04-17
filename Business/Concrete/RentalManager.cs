@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
@@ -8,10 +7,8 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using Core.DataAccess;
 using Core.Utilities.Business;
 using Microsoft.EntityFrameworkCore.Internal;
-using System.Threading;
 using Entities.DTOs;
 using Core.Aspects.Autofac.Caching;
 using Business.BusinessAspects.Autofac;
@@ -20,21 +17,27 @@ namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
-        private IRentalDAL _rentalDal;
+        private readonly IRentalDAL _rentalDal;
 
-        public RentalManager(IRentalDAL rentalDAL)
+        public RentalManager(IRentalDAL rentalDal)
         {
-            _rentalDal = rentalDAL;
+            _rentalDal = rentalDal;
         }
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());  
         }
 
-        public IDataResult<List<Rental>> GetById(int rentalId)
+        public IDataResult<Rental>GetById(int rentalId)
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r => r.RentalId == rentalId));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(rental => rental.RentalId == rentalId));
         }
+
+        public IDataResult<List<Rental>> GetByCarId(int carId)
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(rental => rental.CarId == carId));
+        }
+
         [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
@@ -68,7 +71,7 @@ namespace Business.Concrete
 
         private IResult CheckIfReturnDateNull(int carId)
         {
-            var result = _rentalDal.GetAll(r => r.CarId == carId && r.ReturnDate == null).Any();
+            var result = _rentalDal.GetAll(rental => rental.CarId == carId && rental.ReturnDate == null).Any();
 
             if (result)
             {

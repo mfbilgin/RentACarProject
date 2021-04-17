@@ -20,13 +20,19 @@ namespace Business.Concrete
 
         public IResult Add(SavedDebitCard debitCard)
         {
-            IResult result = BusinessRules.Run(CheckIfCardExist(debitCard.CardNumber));
+            IResult result = BusinessRules.Run(CheckIfCardExist(debitCard.CardNumber,debitCard.UserId));
             if (result != null)
             {
                 return result;
             }
             _saveCardDal.Add(debitCard);
             return new SuccessResult(Messages.SavedCardAdded);
+        }
+
+        public IResult Delete(SavedDebitCard debitCard)
+        {
+            _saveCardDal.Delete(debitCard);
+            return new SuccessResult(Messages.SavedCardDeleted);
         }
 
         public IDataResult<List<SavedDebitCard>> GetAll()
@@ -45,12 +51,18 @@ namespace Business.Concrete
             return new SuccessDataResult<List<SavedDebitCard>>(_saveCardDal.GetAll(dc=> dc.UserId == userId));
         }
 
-        private IResult CheckIfCardExist(string cardNumber)
+        private IResult CheckIfCardExist(string cardNumber,int userId)
         {
-            if (_saveCardDal.GetAll(dc=> dc.CardNumber == cardNumber).Count > 0)
+            var checkByNumber = _saveCardDal.Get(dc => dc.CardNumber == cardNumber);
+            var checkByUserId = _saveCardDal.GetAll(dc => dc.UserId == userId);
+            foreach (var card in checkByUserId)
             {
-                return new ErrorResult(Messages.CardExist);
+                if (cardNumber == checkByNumber.CardNumber && cardNumber == card.CardNumber )
+                {
+                    return new ErrorResult(Messages.CardExist);
+                }
             }
+
             return new SuccessResult();
         }
     }

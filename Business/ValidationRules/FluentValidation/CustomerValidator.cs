@@ -11,7 +11,7 @@ namespace Business.ValidationRules.FluentValidation
         public CustomerValidator()
         {
             RuleFor(c => c.UserId).NotEmpty();
-            RuleFor(c => c.CompanyName).MinimumLength(3).WithMessage("Şirket Adı En Az 3 Karakter Olmalıdır");
+            RuleFor(c => c.PhoneNumber).MinimumLength(10);
         }
     }
 }

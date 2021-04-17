@@ -16,7 +16,7 @@ namespace Business.Concrete
 {
     public class CustomerManager : ICustomerService
     {
-        private ICustomerDAL _customerDal;
+        private readonly ICustomerDAL _customerDal;
 
         public CustomerManager(ICustomerDAL customerDal)
         {
@@ -27,14 +27,14 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
 
-        public IDataResult<List<Customer>> GetByCustomerId(int CustomerId)
+        public IDataResult<Customer> GetByCustomerId(int CustomerId)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(customer => customer.CustomerId == CustomerId));
+            return new SuccessDataResult<Customer>(_customerDal.Get(customer => customer.CustomerId == CustomerId));
         }
 
-        public IDataResult<List<Customer>> GetByUserId(int UserId)
+        public IDataResult<Customer> GetByUserId(int UserId)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(customer => customer.UserId == UserId));
+            return new SuccessDataResult<Customer>(_customerDal.Get(customer => customer.UserId == UserId));
         }
 
 

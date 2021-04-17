@@ -22,15 +22,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Concrete.EntityFramework.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace WebAPI
 {
     public class Startup
     {
+        private IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -63,7 +67,7 @@ namespace WebAPI
             //services.AddSingleton<IProductDal, EfProductDal>();
             services.AddCors();
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
-
+ 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -82,7 +86,6 @@ namespace WebAPI
             services.AddDependencyResolvers(new ICoreModule[] {
                new CoreModule()
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,7 +95,7 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }   
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4213").AllowAnyHeader());
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.ConfigureCustomExceptionMiddleware();
 

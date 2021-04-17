@@ -68,5 +68,17 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
+                 
+        [HttpPost("forgotpassword")]
+        public IActionResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            var result = _authService.ForgotPassword(forgotPasswordDto);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
     }
 }

@@ -38,14 +38,14 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDAL.GetAll());
         }
 
-        public IDataResult<List<Brand>> GetByBrandId(int BrandId)
+        public IDataResult<Brand> GetByBrandId(int brandId)
         {
-            return new SuccessDataResult<List<Brand>>(_brandDAL.GetAll(b => b.BrandId == BrandId));
+            return new SuccessDataResult<Brand>(_brandDAL.Get(brand => brand.BrandId == brandId));
         }
 
-        public IDataResult<List<Brand>> GetByBrandName(string BrandName)
+        public IDataResult<Brand> GetByBrandName(string brandName)
         {
-            return new SuccessDataResult<List<Brand>>(_brandDAL.GetAll(b => b.BrandName == BrandName));
+            return new SuccessDataResult<Brand>(_brandDAL.Get(brand => brand.BrandName == brandName));
         }
     }
 }

@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using DataAccess.Concrete.EntityFramework.Context;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EFCarDAL : EfEntityRepositoryBase<Car, RentACarContext>, ICarDAL
+ public class EfCarDal : EfEntityRepositoryBase<Car, RentACarContext>, ICarDAL
     {
         public List<CarDetailDto> GetAllCarDetails(Expression<Func<Car, bool>> filter = null)
         {
@@ -38,7 +39,7 @@ namespace DataAccess.Concrete.EntityFramework
 
                                  MinFindex = car.MinFindex,
 
-                                 ImagePath = context.CarImages.Where(image => image.CarId == car.CarId).FirstOrDefault().ImagePath
+                                 ImagePath =(from i in context.CarImages where i.CarId == car.CarId select i.ImagePath).ToList(),
                              };
                 return result.ToList();
             }
@@ -63,6 +64,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  CarId = car.CarId,
                                  Status = !context.Rentals.Any(rental => rental.CarId == carId && rental.ReturnDate > DateTime.Now && rental.RentDate < DateTime.Now.AddDays(1)),
                                  MinFindex =  car.MinFindex,
+                                 ImagePath =(from i in context.CarImages where i.CarId == car.CarId select i.ImagePath).ToList()
                               
                              };
 

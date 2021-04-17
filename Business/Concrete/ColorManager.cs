@@ -14,38 +14,38 @@ namespace Business.Concrete
 {
     public class ColorManager : IColorService
     {
-        IColorDAL _colorDAL;
-        public ColorManager(IColorDAL colorDAL)
+        private readonly IColorDAL _colorDal;
+        public ColorManager(IColorDAL colorDal)
         {
-            _colorDAL = colorDAL;
+            _colorDal = colorDal;
         }
 
         [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color color)
         {
-            _colorDAL.Add(color);
+            _colorDal.Add(color);
             return new SuccessResult(Messages.ColorAdded);
         }
 
         public IResult Delete(Color color)
         {
-            _colorDAL.Delete(color);
+            _colorDal.Delete(color);
             return new SuccessResult(Messages.ColorDeleted);
         }
 
         public IDataResult<List<Color>> GetAll()
         {
-            return new SuccessDataResult<List<Color>>(_colorDAL.GetAll());
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
         }
 
-        public IDataResult<List<Color>> GetByColorId(int ColorId)
+        public IDataResult<Color> GetByColorId(int colorId)
         {
-            return new SuccessDataResult<List<Color>>(_colorDAL.GetAll(c => c.ColorId == ColorId));
+            return new SuccessDataResult<Color>(_colorDal.Get(color => color.ColorId == colorId));
         }
 
-        public IDataResult<List<Color>> GetByColorName(string ColorName)
+        public IDataResult<Color> GetByColorName(string colorName)
         {
-            return new SuccessDataResult<List< Color >> (_colorDAL.GetAll(c => c.ColorName == ColorName));
+            return new SuccessDataResult< Color > (_colorDal.Get(color => color.ColorName == colorName));
         }
     }
 }

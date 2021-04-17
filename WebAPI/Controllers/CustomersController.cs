@@ -45,14 +45,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbycustomerid")]
-        public IActionResult GetByCustomerId(int customerID)
+        public IActionResult GetByCustomerId(int customerId)
         {
-            var result = _customerService.GetByCustomerId(customerID);
+            var result = _customerService.GetByCustomerId(customerId);
             if (result.Success)
             {
                 return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("getbyuserid")]
@@ -63,7 +63,7 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpPost("add")]
@@ -72,10 +72,10 @@ namespace WebAPI.Controllers
             var result = _customerService.Add(customer);
             if (result.Success)
             {
-                return Ok(result.Message);
+                return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
         [HttpPost("update")]
         public IActionResult Update(Customer customer)
@@ -83,10 +83,10 @@ namespace WebAPI.Controllers
             var result = _customerService.Update(customer);
             if (result.Success)
             {
-                return Ok(result.Message);
+                return Ok(result);
             }
 
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
     }
 }

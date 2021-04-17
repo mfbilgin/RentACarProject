@@ -1,0 +1,11 @@
+using Core.Entities;
+
+namespace Entities.DTOs
+{
+    public class ForgotPasswordDto:IDto
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string RepeatPassword { get; set; }
+    }
+}

@@ -98,9 +98,9 @@ namespace Business.Concrete
         }
         //[CacheAspect]
         [PerformanceAspect(7)]
-        public IDataResult<CarImage> Get(int id)
+        public IDataResult<CarImage> GetById(int id)
         {
-            return new SuccessDataResult<CarImage>(_carImageDal.Get(p => p.Id == id));
+            return new SuccessDataResult<CarImage>(_carImageDal.Get(carImage => carImage.Id == id));
         }
         private IResult CarImageDelete(CarImage carImage)
         {

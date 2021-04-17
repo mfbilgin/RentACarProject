@@ -111,9 +111,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("checkcard")]
-        public IActionResult CheckCard(string cardNumber)
+        public IActionResult CheckCard(DebitCard card)
         {
-            var result = _debitCardService.CheckCard(cardNumber);
+            var result = _debitCardService.CheckCard(card);
             if (result.Success)
             {
                 return Ok(result);
@@ -125,7 +125,7 @@ namespace WebAPI.Controllers
         [HttpPost("addrental")]
         public IActionResult AddRental(PaymentDto paymentDto)
         {
-            var result = _debitCardService.AddRental(paymentDto.cardNumber, paymentDto.rental, paymentDto.amount);
+            var result = _debitCardService.AddRental(paymentDto.DebitCard, paymentDto.Rental, paymentDto.Amount);
             if (result.Success)
             {
                 return Ok(result);

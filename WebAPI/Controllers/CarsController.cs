@@ -8,7 +8,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        ICarService _carService;
+        private readonly ICarService _carService;
 
         public CarsController(ICarService carService)
         {
@@ -35,25 +35,29 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
-        [HttpGet("getcardetailbyId")]
-        public IActionResult GetCarDetail(int carId)
+        [HttpGet("getcardetailbycarid")]
+        public IActionResult GetCarDetailByCarId(int carId)
         {
-            var result = _carService.GetCarAndImagesDtoById(carId);
+            var result = _carService.GetCarByCarId(carId);
             if (result.Success)
+            {
                 return Ok(result);
-            else
-                return BadRequest(result);
+            }
+
+            return BadRequest(result);
         }
+
         [HttpGet("getbybrand")]
         public IActionResult GetByBrand(int brandId)
         {
-            var result = _carService.GetCarsByBrandId(brandId);
+            var result = _carService.GetCarByBrandId(brandId);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
+        
         [HttpGet("getbycolor")]
         public IActionResult GetByColor(int colorId)
         {
@@ -64,6 +68,18 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        
+        [HttpGet("getcardetailbybrandandcolorid")]
+        public IActionResult GetCarDetailByBrandAndColorId(int colorId,int brandId)
+        {
+            var result = _carService.GetCarsByColorAndBrandId(colorId,brandId);
+            if (result.Success)
+            {
+                    return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        
         [HttpGet("getcarbyid")]
         public IActionResult GetCarById(int carId)
         {
